@@ -74,6 +74,17 @@ class _ModalContentState extends State<ModalContent> {
                 Navigator.of(context).pop();
               },
             ),
+             ListTile(
+              title: const Text('Upcoming'),
+              leading: const Icon(
+                LineAwesomeIcons.calendar_minus_o,
+               // color: const Color(0xFF2d2d2d),
+              ),
+              onTap: () {
+                s.changeSort('Upcoming');
+                Navigator.of(context).pop();
+              },
+            ),
           ],
         ),
       );

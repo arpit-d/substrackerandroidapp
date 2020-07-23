@@ -59,6 +59,17 @@ class MyDatabase extends _$MyDatabase {
     return (select(subs)..where((s) => s.payStatus.equals('Pending'))).watch();
   }
 
+  Stream<List<Sub>> getSubsByUpcoming() {
+    return (select(subs)
+          ..orderBy(
+            ([
+              (s) =>
+                  OrderingTerm(expression: s.payDate, mode: OrderingMode.asc),
+            ]),
+          ))
+        .watch();
+  }
+
   Stream<List<Sub>> getAscSubs() {
     return (select(subs)
           ..orderBy(

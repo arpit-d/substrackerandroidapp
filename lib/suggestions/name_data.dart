@@ -10,7 +10,6 @@ class BackendService {
 
 class NamesService {
   static final List<String> names = [
-    'Voot'
     'Netflix',
     'Udemy',
     'Spotify',

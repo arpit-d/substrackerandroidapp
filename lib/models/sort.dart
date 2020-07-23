@@ -1,24 +1,23 @@
 import 'package:flutter/cupertino.dart';
 
-class Sort with ChangeNotifier{
+class Sort with ChangeNotifier {
   String sort = 'all';
   void changeSort(String s) {
-    if(s == 'Paid'){
+    if (s == 'Paid') {
       sort = s;
-    }
-    else if (s == 'Pending'){
+    } else if (s == 'Pending') {
       sort = 'Pending';
-    }
-    else if (s == 'Asc'){
+    } else if (s == 'Asc') {
       sort = 'Asc';
-    }
-    else if (s == 'Desc'){
+    } else if (s == 'Desc') {
       sort = 'Desc';
-    }
-    else {
+    } else if (s == 'Upcoming') {
+      sort = 'Upcoming';
+    } else {
       sort = 'all';
     }
     notifyListeners();
-    }
-    String get sorts => sort;
   }
+
+  String get sorts => sort;
+}

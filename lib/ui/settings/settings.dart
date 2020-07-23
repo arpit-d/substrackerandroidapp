@@ -35,6 +35,7 @@ class SettingsPage extends StatelessWidget {
           children: [
             const Divider(),
             ListTile(
+              
               leading: Icon(LineAwesomeIcons.user),
               title: const Text('Contact Me!'),
               subtitle:

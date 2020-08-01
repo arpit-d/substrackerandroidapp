@@ -70,6 +70,12 @@ class MyDatabase extends _$MyDatabase {
         .watch();
   }
 
+  Stream<List<Sub>> getSubsUpcoming() {
+    return (select(subs)
+          ..orderBy(([(s)=>OrderingTerm(expression: s.payDate, mode: OrderingMode.desc)]))  )
+        .watch();
+  }
+
   Stream<List<Sub>> getAscSubs() {
     return (select(subs)
           ..orderBy(

@@ -56,7 +56,7 @@ class _ModalContentState extends State<ModalContent> {
               title: const Text('Paid'),
               leading: const Icon(
                 LineAwesomeIcons.check_circle_o,
-               // color: const Color(0xFF2d2d2d),
+                // color: const Color(0xFF2d2d2d),
               ),
               onTap: () {
                 s.changeSort('Paid');
@@ -67,18 +67,18 @@ class _ModalContentState extends State<ModalContent> {
               title: const Text('Pending'),
               leading: const Icon(
                 LineAwesomeIcons.times,
-               // color: const Color(0xFF2d2d2d),
+                // color: const Color(0xFF2d2d2d),
               ),
               onTap: () {
                 s.changeSort('Pending');
                 Navigator.of(context).pop();
               },
             ),
-             ListTile(
+            ListTile(
               title: const Text('Upcoming'),
               leading: const Icon(
                 LineAwesomeIcons.calendar_minus_o,
-               // color: const Color(0xFF2d2d2d),
+                // color: const Color(0xFF2d2d2d),
               ),
               onTap: () {
                 s.changeSort('Upcoming');

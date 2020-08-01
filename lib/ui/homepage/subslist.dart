@@ -17,7 +17,7 @@ class SubsList extends StatefulWidget {
 }
 
 class _SubsListState extends State<SubsList> {
-  getRealDate(DateTime d, String pNo, String pType) {
+  getRealDate(DateTime d, String pNo, String pType, bool sortType) {
     DateTime realDays;
     if (pType == 'Day') {
       realDays = Jiffy(d).add(days: int.parse(pNo));
@@ -39,6 +39,10 @@ class _SubsListState extends State<SubsList> {
         realDays = Jiffy(realDays).add(months: int.parse(pNo));
       }
     }
+    if (sortType == true) {
+      return realDays;
+    }
+
     var r = 'Next Payment: ${realDays.day}-${realDays.month}-${realDays.year}';
     return r.toString();
   }
@@ -72,6 +76,7 @@ class _SubsListState extends State<SubsList> {
         stream: db.getSubs(),
         builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
           final subs = snapshot.data ?? List(0);
+
           return allSubsList(context, box, subs, db, 'EXPENSES');
         },
       );
@@ -80,20 +85,24 @@ class _SubsListState extends State<SubsList> {
         stream: db.getPaidSubs(),
         builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
           final subs = snapshot.data ?? List(0);
+
           return allSubsList(context, box, subs, db, 'PAID');
         },
       );
-    } 
-    else if (s.sorts == 'Upcoming') {
-       return StreamBuilder(
-        stream: db.getSubsByUpcoming(),
+    } else if (s.sorts == 'Upcoming') {
+      return StreamBuilder(
+        stream: db.getSubsUpcoming(),
         builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
           final subs = snapshot.data ?? List(0);
+          subs.sort((a, b) {
+            return getRealDate(a.payDate, a.periodNo, a.periodType, true)
+                .compareTo(
+                    getRealDate(b.payDate, b.periodNo, b.periodType, true));
+          });
           return allSubsList(context, box, subs, db, 'EXPENSES');
         },
       );
-    }
-    else {
+    } else {
       return StreamBuilder(
         stream: db.getPendingSubs(),
         builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
@@ -104,10 +113,20 @@ class _SubsListState extends State<SubsList> {
     }
   }
 
-  Column allSubsList(BuildContext context, Box box, List<Sub> subs,
+  Widget allSubsList(BuildContext context, Box box, List<Sub> subs,
       MyDatabase db, String name) {
     final exp = Provider.of<Expenses>(context);
     final num = Provider.of<NumOfSubs>(context);
+    if (subs.length == 0) {
+      exp.setExpenses(0);
+      num.totalSubs(0);
+      return Center(
+        child: Container(
+          child: const Text(
+              'You Have Not Added Any Subscriptions Yet. \n Click On The Below Button To Start!'),
+        ),
+      );
+    }
     return Column(
       children: [
         SizedBox(height: MediaQuery.of(context).size.height * 0.015),
@@ -209,6 +228,7 @@ class _SubsListState extends State<SubsList> {
               subs.forEach((element) {
                 sum = sum + element.subsPrice;
               });
+
               exp.setExpenses(sum);
               num.totalSubs(subs.length);
 
@@ -258,8 +278,8 @@ class _SubsListState extends State<SubsList> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          getRealDate(
-                              item.payDate, item.periodNo, item.periodType),
+                          getRealDate(item.payDate, item.periodNo,
+                              item.periodType, false),
                           style: const TextStyle(fontSize: 16),
                         ),
                         Text(item.periodNo.toString() == '1'

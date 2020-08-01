@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 class SettingsPage extends StatelessWidget {
   final Uri _emailLaunchUri = Uri(
       scheme: 'mailto',
-      path: 'arpitme199@gmail.com',
+      path: 'btechcse3yr@gmail.com',
       queryParameters: {'subject': 'Bug report or Feature Request'});
 
   @override
@@ -35,7 +35,6 @@ class SettingsPage extends StatelessWidget {
           children: [
             const Divider(),
             ListTile(
-              
               leading: Icon(LineAwesomeIcons.user),
               title: const Text('Contact Me!'),
               subtitle:
@@ -45,9 +44,11 @@ class SettingsPage extends StatelessWidget {
               },
             ),
             const Divider(),
-            const ListTile(
+            ListTile(
               leading: Icon(LineAwesomeIcons.thumbs_up),
               title: const Text('Rate App'),
+              onTap: () => launch(
+                  'https://play.google.com/store/apps/details?id=com.and.substracker'),
               subtitle: const Text(
                   'Liked the app? Click here to rate it on Play Store'),
             ),

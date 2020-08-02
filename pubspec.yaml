@@ -21,24 +21,24 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  auto_size_text: 
+  auto_size_text: ^2.1.0
   flutter:
     sdk: flutter
   hive: 
   hive_flutter:
-  quick_actions:
+  quick_actions: ^0.4.0+6
   path_provider:
-  flutter_typeahead: 
+  flutter_typeahead: ^1.8.7
   moor_ffi: 0.5.0
   line_awesome_icons:
-  jiffy: 
-  flushbar:
-  provider:
-  flutter_slidable:
-  gradient_text:
-  flutter_launcher_icons: 
-  shared_preferences:
-  url_launcher:
+  jiffy: ^3.0.1
+  flushbar: ^1.10.4
+  provider: ^4.3.1
+  flutter_slidable: ^0.5.5
+  gradient_text: ^1.0.2
+  flutter_launcher_icons: ^0.7.5
+  shared_preferences: ^0.5.8
+  url_launcher: ^5.5.0
 
 
   

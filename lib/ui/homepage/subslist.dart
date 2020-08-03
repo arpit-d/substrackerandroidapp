@@ -238,10 +238,34 @@ class _SubsListState extends State<SubsList> {
                 secondaryActions: <Widget>[
                   IconSlideAction(
                     caption: 'Delete',
-                    color: const Color(0xFFEE244D),
+                    color: const Color(0xFFFF0000),
                     icon: LineAwesomeIcons.trash_o,
                     onTap: () {
-                      db.deleteTask(item);
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Delete subscription record?"),
+                            content: const Text(
+                                "Are you sure you want to delete this record? Action can't be reversed!"),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: const Text("YES"),
+                                onPressed: () {
+                                  db.deleteTask(item);
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              FlatButton(
+                                child: const Text("NO"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              )
+                            ],
+                          );
+                        },
+                      );
                     },
                   ),
                 ],

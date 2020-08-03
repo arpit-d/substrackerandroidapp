@@ -76,19 +76,43 @@ class _SubInfoState extends State<SubInfo> {
               icon: const Icon(LineAwesomeIcons.trash),
               tooltip: 'Delete',
               onPressed: () {
-                final sub = Sub(
-                    id: widget.id,
-                    subsPrice: widget.charges,
-                    subsName: widget.name,
-                    notes: widget.notes,
-                    payStatus: widget.payStatus,
-                    payMethod: widget.payMethod,
-                    payDate: widget.payDate,
-                    periodNo: widget.periodNo,
-                    periodType: widget.periodType,
-                    category: widget.category);
-                db.deleteTask(sub);
-                Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text("Delete subscription record?"),
+                      content: const Text(
+                          "Are you sure you want to delete this record? Action can't be reversed!"),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: const Text("YES"),
+                          onPressed: () {
+                            final sub = Sub(
+                                id: widget.id,
+                                subsPrice: widget.charges,
+                                subsName: widget.name,
+                                notes: widget.notes,
+                                payStatus: widget.payStatus,
+                                payMethod: widget.payMethod,
+                                payDate: widget.payDate,
+                                periodNo: widget.periodNo,
+                                periodType: widget.periodType,
+                                category: widget.category);
+                            db.deleteTask(sub);
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        FlatButton(
+                          child: const Text("NO"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    );
+                  },
+                );
               })
         ],
       ),

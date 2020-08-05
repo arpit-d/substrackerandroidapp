@@ -28,6 +28,10 @@ class Subs extends Table {
   TextColumn get periodType => text()();
 
   TextColumn get category => text().nullable()();
+
+  TextColumn get archive => text()();
+
+  TextColumn get currency => text()();
 }
 
 LazyDatabase _openConnection() {
@@ -42,7 +46,15 @@ LazyDatabase _openConnection() {
 class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 
-  Stream<List<Sub>> getSubs() => select(subs).watch();
+  //Stream<List<Sub>> getSubs() => select(subs).watch();
+
+  Stream<List<Sub>> getSubs() {
+    return (select(subs)..where((s) => s.archive.equals('false'))).watch();
+  }
+
+  Stream<List<Sub>> getArchiveSubs() {
+    return (select(subs)..where((s) => s.archive.equals('true'))).watch();
+  }
 
   // insert a sub
   Future insertSub(Sub sub) => into(subs).insert(sub);
@@ -72,7 +84,9 @@ class MyDatabase extends _$MyDatabase {
 
   Stream<List<Sub>> getSubsUpcoming() {
     return (select(subs)
-          ..orderBy(([(s)=>OrderingTerm(expression: s.payDate, mode: OrderingMode.desc)]))  )
+          ..orderBy(([
+            (s) => OrderingTerm(expression: s.payDate, mode: OrderingMode.desc)
+          ])))
         .watch();
   }
 
@@ -99,5 +113,16 @@ class MyDatabase extends _$MyDatabase {
   }
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2; // bump because the tables have changed
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
+        return m.createAll();
+      }, onUpgrade: (Migrator m, int from, int to) async {
+        if (from == 1) {
+          // we added the dueDate property in the change from version 1
+          await m.addColumn(subs, subs.currency);
+          await m.addColumn(subs, subs.archive);
+        }
+      });
 }

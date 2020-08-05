@@ -224,6 +224,7 @@ class _SubsListState extends State<SubsList> {
             itemCount: subs.length,
             itemBuilder: (_, index) {
               final item = subs[index];
+              // print(item.toJsonString());
               double sum = 0;
               subs.forEach((element) {
                 sum = sum + element.subsPrice;
@@ -236,6 +237,27 @@ class _SubsListState extends State<SubsList> {
                 actionPane: const SlidableDrawerActionPane(),
                 actionExtentRatio: 0.25,
                 secondaryActions: <Widget>[
+                  IconSlideAction(
+                    caption: 'Archive',
+                    color: const Color(0xFFFFF000),
+                    icon: LineAwesomeIcons.archive,
+                    onTap: () {
+                      final sub = Sub(
+                                  id: item.id,
+                                  subsPrice: item.subsPrice,
+                                  subsName: item.subsName,
+                                  notes: item.notes,
+                                  payStatus: item.payStatus,
+                                  payMethod: item.payMethod,
+                                  payDate: item.payDate,
+                                  periodNo: item.periodNo,
+                                  periodType:item.periodType,
+                                  category: item.category,
+                                  currency: '\$',
+                                  archive: 'true');
+                              db.updateSub(sub);
+                    },
+                  ),
                   IconSlideAction(
                     caption: 'Delete',
                     color: const Color(0xFFFF0000),
@@ -270,6 +292,7 @@ class _SubsListState extends State<SubsList> {
                   ),
                 ],
                 child: Card(
+                  margin: const EdgeInsets.fromLTRB(0,7,0,7),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -295,7 +318,7 @@ class _SubsListState extends State<SubsList> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(item.subsName),
-                        Text(item.subsPrice.toStringAsFixed(2) + '\$'),
+                        Text(item.subsPrice.toStringAsFixed(2) + item.currency),
                       ],
                     ),
                     subtitle: Row(

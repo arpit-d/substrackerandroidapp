@@ -18,6 +18,8 @@ class Sub extends DataClass implements Insertable<Sub> {
   final String periodNo;
   final String periodType;
   final String category;
+  final String archive;
+  final String currency;
   Sub(
       {@required this.id,
       @required this.subsName,
@@ -28,7 +30,9 @@ class Sub extends DataClass implements Insertable<Sub> {
       @required this.payDate,
       @required this.periodNo,
       @required this.periodType,
-      this.category});
+      this.category,
+      @required this.archive,
+      @required this.currency});
   factory Sub.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -56,6 +60,10 @@ class Sub extends DataClass implements Insertable<Sub> {
           .mapFromDatabaseResponse(data['${effectivePrefix}period_type']),
       category: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}category']),
+      archive:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}archive']),
+      currency: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}currency']),
     );
   }
   @override
@@ -91,6 +99,12 @@ class Sub extends DataClass implements Insertable<Sub> {
     if (!nullToAbsent || category != null) {
       map['category'] = Variable<String>(category);
     }
+    if (!nullToAbsent || archive != null) {
+      map['archive'] = Variable<String>(archive);
+    }
+    if (!nullToAbsent || currency != null) {
+      map['currency'] = Variable<String>(currency);
+    }
     return map;
   }
 
@@ -123,6 +137,12 @@ class Sub extends DataClass implements Insertable<Sub> {
       category: category == null && nullToAbsent
           ? const Value.absent()
           : Value(category),
+      archive: archive == null && nullToAbsent
+          ? const Value.absent()
+          : Value(archive),
+      currency: currency == null && nullToAbsent
+          ? const Value.absent()
+          : Value(currency),
     );
   }
 
@@ -140,6 +160,8 @@ class Sub extends DataClass implements Insertable<Sub> {
       periodNo: serializer.fromJson<String>(json['periodNo']),
       periodType: serializer.fromJson<String>(json['periodType']),
       category: serializer.fromJson<String>(json['category']),
+      archive: serializer.fromJson<String>(json['archive']),
+      currency: serializer.fromJson<String>(json['currency']),
     );
   }
   @override
@@ -156,6 +178,8 @@ class Sub extends DataClass implements Insertable<Sub> {
       'periodNo': serializer.toJson<String>(periodNo),
       'periodType': serializer.toJson<String>(periodType),
       'category': serializer.toJson<String>(category),
+      'archive': serializer.toJson<String>(archive),
+      'currency': serializer.toJson<String>(currency),
     };
   }
 
@@ -169,7 +193,9 @@ class Sub extends DataClass implements Insertable<Sub> {
           DateTime payDate,
           String periodNo,
           String periodType,
-          String category}) =>
+          String category,
+          String archive,
+          String currency}) =>
       Sub(
         id: id ?? this.id,
         subsName: subsName ?? this.subsName,
@@ -181,6 +207,8 @@ class Sub extends DataClass implements Insertable<Sub> {
         periodNo: periodNo ?? this.periodNo,
         periodType: periodType ?? this.periodType,
         category: category ?? this.category,
+        archive: archive ?? this.archive,
+        currency: currency ?? this.currency,
       );
   @override
   String toString() {
@@ -194,7 +222,9 @@ class Sub extends DataClass implements Insertable<Sub> {
           ..write('payDate: $payDate, ')
           ..write('periodNo: $periodNo, ')
           ..write('periodType: $periodType, ')
-          ..write('category: $category')
+          ..write('category: $category, ')
+          ..write('archive: $archive, ')
+          ..write('currency: $currency')
           ..write(')'))
         .toString();
   }
@@ -216,8 +246,12 @@ class Sub extends DataClass implements Insertable<Sub> {
                               payDate.hashCode,
                               $mrjc(
                                   periodNo.hashCode,
-                                  $mrjc(periodType.hashCode,
-                                      category.hashCode))))))))));
+                                  $mrjc(
+                                      periodType.hashCode,
+                                      $mrjc(
+                                          category.hashCode,
+                                          $mrjc(archive.hashCode,
+                                              currency.hashCode))))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -231,7 +265,9 @@ class Sub extends DataClass implements Insertable<Sub> {
           other.payDate == this.payDate &&
           other.periodNo == this.periodNo &&
           other.periodType == this.periodType &&
-          other.category == this.category);
+          other.category == this.category &&
+          other.archive == this.archive &&
+          other.currency == this.currency);
 }
 
 class SubsCompanion extends UpdateCompanion<Sub> {
@@ -245,6 +281,8 @@ class SubsCompanion extends UpdateCompanion<Sub> {
   final Value<String> periodNo;
   final Value<String> periodType;
   final Value<String> category;
+  final Value<String> archive;
+  final Value<String> currency;
   const SubsCompanion({
     this.id = const Value.absent(),
     this.subsName = const Value.absent(),
@@ -256,6 +294,8 @@ class SubsCompanion extends UpdateCompanion<Sub> {
     this.periodNo = const Value.absent(),
     this.periodType = const Value.absent(),
     this.category = const Value.absent(),
+    this.archive = const Value.absent(),
+    this.currency = const Value.absent(),
   });
   SubsCompanion.insert({
     this.id = const Value.absent(),
@@ -268,12 +308,16 @@ class SubsCompanion extends UpdateCompanion<Sub> {
     @required String periodNo,
     @required String periodType,
     this.category = const Value.absent(),
+    @required String archive,
+    @required String currency,
   })  : subsName = Value(subsName),
         subsPrice = Value(subsPrice),
         payStatus = Value(payStatus),
         payDate = Value(payDate),
         periodNo = Value(periodNo),
-        periodType = Value(periodType);
+        periodType = Value(periodType),
+        archive = Value(archive),
+        currency = Value(currency);
   static Insertable<Sub> custom({
     Expression<int> id,
     Expression<String> subsName,
@@ -285,6 +329,8 @@ class SubsCompanion extends UpdateCompanion<Sub> {
     Expression<String> periodNo,
     Expression<String> periodType,
     Expression<String> category,
+    Expression<String> archive,
+    Expression<String> currency,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -297,6 +343,8 @@ class SubsCompanion extends UpdateCompanion<Sub> {
       if (periodNo != null) 'period_no': periodNo,
       if (periodType != null) 'period_type': periodType,
       if (category != null) 'category': category,
+      if (archive != null) 'archive': archive,
+      if (currency != null) 'currency': currency,
     });
   }
 
@@ -310,7 +358,9 @@ class SubsCompanion extends UpdateCompanion<Sub> {
       Value<DateTime> payDate,
       Value<String> periodNo,
       Value<String> periodType,
-      Value<String> category}) {
+      Value<String> category,
+      Value<String> archive,
+      Value<String> currency}) {
     return SubsCompanion(
       id: id ?? this.id,
       subsName: subsName ?? this.subsName,
@@ -322,6 +372,8 @@ class SubsCompanion extends UpdateCompanion<Sub> {
       periodNo: periodNo ?? this.periodNo,
       periodType: periodType ?? this.periodType,
       category: category ?? this.category,
+      archive: archive ?? this.archive,
+      currency: currency ?? this.currency,
     );
   }
 
@@ -358,6 +410,12 @@ class SubsCompanion extends UpdateCompanion<Sub> {
     if (category.present) {
       map['category'] = Variable<String>(category.value);
     }
+    if (archive.present) {
+      map['archive'] = Variable<String>(archive.value);
+    }
+    if (currency.present) {
+      map['currency'] = Variable<String>(currency.value);
+    }
     return map;
   }
 
@@ -373,7 +431,9 @@ class SubsCompanion extends UpdateCompanion<Sub> {
           ..write('payDate: $payDate, ')
           ..write('periodNo: $periodNo, ')
           ..write('periodType: $periodType, ')
-          ..write('category: $category')
+          ..write('category: $category, ')
+          ..write('archive: $archive, ')
+          ..write('currency: $currency')
           ..write(')'))
         .toString();
   }
@@ -493,6 +553,30 @@ class $SubsTable extends Subs with TableInfo<$SubsTable, Sub> {
     );
   }
 
+  final VerificationMeta _archiveMeta = const VerificationMeta('archive');
+  GeneratedTextColumn _archive;
+  @override
+  GeneratedTextColumn get archive => _archive ??= _constructArchive();
+  GeneratedTextColumn _constructArchive() {
+    return GeneratedTextColumn(
+      'archive',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _currencyMeta = const VerificationMeta('currency');
+  GeneratedTextColumn _currency;
+  @override
+  GeneratedTextColumn get currency => _currency ??= _constructCurrency();
+  GeneratedTextColumn _constructCurrency() {
+    return GeneratedTextColumn(
+      'currency',
+      $tableName,
+      false,
+    );
+  }
+
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -504,7 +588,9 @@ class $SubsTable extends Subs with TableInfo<$SubsTable, Sub> {
         payDate,
         periodNo,
         periodType,
-        category
+        category,
+        archive,
+        currency
       ];
   @override
   $SubsTable get asDslTable => this;
@@ -569,6 +655,18 @@ class $SubsTable extends Subs with TableInfo<$SubsTable, Sub> {
     if (data.containsKey('category')) {
       context.handle(_categoryMeta,
           category.isAcceptableOrUnknown(data['category'], _categoryMeta));
+    }
+    if (data.containsKey('archive')) {
+      context.handle(_archiveMeta,
+          archive.isAcceptableOrUnknown(data['archive'], _archiveMeta));
+    } else if (isInserting) {
+      context.missing(_archiveMeta);
+    }
+    if (data.containsKey('currency')) {
+      context.handle(_currencyMeta,
+          currency.isAcceptableOrUnknown(data['currency'], _currencyMeta));
+    } else if (isInserting) {
+      context.missing(_currencyMeta);
     }
     return context;
   }

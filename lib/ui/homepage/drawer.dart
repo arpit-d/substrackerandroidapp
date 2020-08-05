@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/ui/apptheme/theme.dart';
+import 'package:substracker/ui/homepage/archived/archive.dart';
 import 'package:substracker/ui/settings/settings.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -39,6 +40,16 @@ class _AppDrawerState extends State<AppDrawer> {
               },
               value: notifier.darkTheme,
             ),
+          ),
+          ListTile(
+            leading: const Icon(LineAwesomeIcons.archive),
+            title: const Text('Archived '),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => ArchiveSubs()));
+            },
           ),
           ListTile(
             leading: const Icon(LineAwesomeIcons.cog),

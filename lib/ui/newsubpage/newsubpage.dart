@@ -18,20 +18,6 @@ class NewSubForm extends StatefulWidget {
 class _NewSubFormState extends State<NewSubForm> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  static const MaterialColor myColor =
-      const MaterialColor(0xFFEA5455, const <int, Color>{
-    50: const Color(0xFFEA5455),
-    100: const Color(0xFFEA5455),
-    200: const Color(0xFFEA5455),
-    300: const Color(0xFFEA5455),
-    400: const Color(0xFFEA5455),
-    500: const Color(0xFFEA5455),
-    600: const Color(0xFFEA5455),
-    700: const Color(0xFFEA5455),
-    800: const Color(0xFFEA5455),
-    900: const Color(0xFFEA5455),
-  });
-
   // controller
   final TextEditingController _typeAheadController = TextEditingController();
   TextEditingController dateCtl = TextEditingController();
@@ -449,7 +435,9 @@ class _NewSubFormState extends State<NewSubForm> {
                             payDate: payDate,
                             periodNo: periodNo,
                             periodType: periodType,
-                            category: category);
+                            category: category,
+                            currency: '\$',
+                            archive: 'false');
                         db.insertSub(sub);
 
                         Navigator.of(context).pop();

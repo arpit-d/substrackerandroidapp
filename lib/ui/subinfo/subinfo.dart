@@ -97,7 +97,9 @@ class _SubInfoState extends State<SubInfo> {
                                 payDate: widget.payDate,
                                 periodNo: widget.periodNo,
                                 periodType: widget.periodType,
-                                category: widget.category);
+                                category: widget.category,
+                                currency: '\$',
+                                archive: 'false');
                             db.deleteTask(sub);
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
@@ -442,7 +444,9 @@ class _SubInfoState extends State<SubInfo> {
                                   payDate: widget.payDate,
                                   periodNo: widget.periodNo,
                                   periodType: widget.periodType,
-                                  category: widget.category);
+                                  category: widget.category,
+                                  currency: '\$',
+                                  archive: 'false');
                               db.updateSub(sub);
                               Navigator.of(context).pop();
                             },

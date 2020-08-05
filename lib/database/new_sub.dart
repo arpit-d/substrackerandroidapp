@@ -90,6 +90,14 @@ class MyDatabase extends _$MyDatabase {
         .watch();
   }
 
+   Stream<List<Sub>> getSubsByCost() {
+    return (select(subs)
+          ..orderBy(([
+            (s) => OrderingTerm(expression: s.subsPrice, mode: OrderingMode.desc)
+          ])))
+        .watch();
+  }
+
   Stream<List<Sub>> getAscSubs() {
     return (select(subs)
           ..orderBy(

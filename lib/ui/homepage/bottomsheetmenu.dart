@@ -85,6 +85,17 @@ class _ModalContentState extends State<ModalContent> {
                 Navigator.of(context).pop();
               },
             ),
+            ListTile(
+              title: const Text('Cost'),
+              leading: const Icon(
+                LineAwesomeIcons.money,
+                // color: const Color(0xFF2d2d2d),
+              ),
+              onTap: () {
+                s.changeSort('Cost');
+                Navigator.of(context).pop();
+              },
+            ),
           ],
         ),
       );

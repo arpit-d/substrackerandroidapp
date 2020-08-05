@@ -89,6 +89,19 @@ class _SubsListState extends State<SubsList> {
           return allSubsList(context, box, subs, db, 'PAID');
         },
       );
+    } else if (s.sorts == 'Cost') {
+      return StreamBuilder(
+        stream: db.getSubsByCost(),
+        builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
+          final subs = snapshot.data ?? List(0);
+          subs.sort((a, b) {
+            return getRealDate(a.payDate, a.periodNo, a.periodType, true)
+                .compareTo(
+                    getRealDate(b.payDate, b.periodNo, b.periodType, true));
+          });
+          return allSubsList(context, box, subs, db, 'EXPENSES');
+        },
+      );
     } else if (s.sorts == 'Upcoming') {
       return StreamBuilder(
         stream: db.getSubsUpcoming(),
@@ -243,19 +256,19 @@ class _SubsListState extends State<SubsList> {
                     icon: LineAwesomeIcons.archive,
                     onTap: () {
                       final sub = Sub(
-                                  id: item.id,
-                                  subsPrice: item.subsPrice,
-                                  subsName: item.subsName,
-                                  notes: item.notes,
-                                  payStatus: item.payStatus,
-                                  payMethod: item.payMethod,
-                                  payDate: item.payDate,
-                                  periodNo: item.periodNo,
-                                  periodType:item.periodType,
-                                  category: item.category,
-                                  currency: '\$',
-                                  archive: 'true');
-                              db.updateSub(sub);
+                          id: item.id,
+                          subsPrice: item.subsPrice,
+                          subsName: item.subsName,
+                          notes: item.notes,
+                          payStatus: item.payStatus,
+                          payMethod: item.payMethod,
+                          payDate: item.payDate,
+                          periodNo: item.periodNo,
+                          periodType: item.periodType,
+                          category: item.category,
+                          currency: '\$',
+                          archive: 'true');
+                      db.updateSub(sub);
                     },
                   ),
                   IconSlideAction(
@@ -292,7 +305,7 @@ class _SubsListState extends State<SubsList> {
                   ),
                 ],
                 child: Card(
-                  margin: const EdgeInsets.fromLTRB(0,7,0,7),
+                  margin: const EdgeInsets.fromLTRB(0, 7, 0, 7),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

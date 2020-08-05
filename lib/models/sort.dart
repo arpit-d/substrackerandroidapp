@@ -13,6 +13,8 @@ class Sort with ChangeNotifier {
       sort = 'Desc';
     } else if (s == 'Upcoming') {
       sort = 'Upcoming';
+    } else if (s == 'Cost') {
+      sort = 'Cost';
     } else {
       sort = 'all';
     }

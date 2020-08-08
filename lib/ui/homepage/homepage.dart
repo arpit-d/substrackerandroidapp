@@ -5,9 +5,10 @@ import 'package:substracker/ui/homepage/bottomsheetmenu.dart';
 import 'package:substracker/ui/homepage/drawer.dart';
 import 'package:substracker/ui/homepage/subslist.dart';
 import 'package:substracker/ui/newsubpage/newsubpage.dart';
+import 'package:substracker/ui/homepage/filterbottomsheet.dart';
 
 class HomePage extends StatelessWidget {
-  void _bottSheet(context) async {
+  void _bottSheet(context, String type) async {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
             // side: BorderSide.canMerge(a, b)
@@ -16,6 +17,9 @@ class HomePage extends StatelessWidget {
                 topRight: const Radius.circular(10.0))),
         context: context,
         builder: (BuildContext bc) {
+          if(type == 'filter'){
+            return FilterBottomSheet();
+          }
           return ModalContent();
         });
   }
@@ -33,10 +37,19 @@ class HomePage extends StatelessWidget {
         actions: <Widget>[
           Builder(builder: (BuildContext context) {
             return IconButton(
+              icon: const Icon(LineAwesomeIcons.filter),
+              tooltip: 'Filter Menu',
+              onPressed: () {
+                _bottSheet(context, 'filter');
+              },
+            );
+          }),
+          Builder(builder: (BuildContext context) {
+            return IconButton(
               icon: const Icon(LineAwesomeIcons.angle_down),
               tooltip: 'Sort Menu',
               onPressed: () {
-                _bottSheet(context);
+                _bottSheet(context, 'sort');
               },
             );
           }),

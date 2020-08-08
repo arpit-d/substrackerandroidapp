@@ -58,8 +58,7 @@ const MaterialColor primarySwatch =
 const String FONT_NAME = 'Rubik';
 
 ThemeData lightTheme = ThemeData(
-  
-  inputDecorationTheme: InputDecorationTheme(
+    inputDecorationTheme: InputDecorationTheme(
       labelStyle: TextStyle(color: const Color(0xFF696969)),
       focusedBorder: const OutlineInputBorder(
         borderSide: const BorderSide(
@@ -76,17 +75,14 @@ ThemeData lightTheme = ThemeData(
           color: const Color(0xFFE23744),
         ),
       ),
-    
-  
       enabledBorder: const OutlineInputBorder(
         borderSide: const BorderSide(
           color: const Color(0xFF2d2d2d),
         ),
       ),
     ),
-    
     primaryIconTheme: const IconThemeData(color: const Color(0xFF2d2d2d)),
-    iconTheme: const IconThemeData(color:const Color(0xFF2d2d2d)),
+    iconTheme: const IconThemeData(color: const Color(0xFF2d2d2d)),
     primarySwatch: primarySwatch,
     scaffoldBackgroundColor: const Color(0xFFFFFFFF),
     appBarTheme: const AppBarTheme(

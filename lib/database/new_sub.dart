@@ -90,10 +90,15 @@ class MyDatabase extends _$MyDatabase {
         .watch();
   }
 
-   Stream<List<Sub>> getSubsByCost() {
+  Stream<List<Sub>> getCategories(String category) {
+    return (select(subs)..where((s) => s.category.equals(category))).watch();
+  }
+
+  Stream<List<Sub>> getSubsByCost() {
     return (select(subs)
           ..orderBy(([
-            (s) => OrderingTerm(expression: s.subsPrice, mode: OrderingMode.desc)
+            (s) =>
+                OrderingTerm(expression: s.subsPrice, mode: OrderingMode.desc)
           ])))
         .watch();
   }

@@ -6,6 +6,7 @@ import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/database/new_sub.dart';
 import 'package:substracker/models/expenses.dart';
+import 'package:substracker/models/filter.dart';
 import 'package:substracker/models/numofsubs.dart';
 import 'package:substracker/models/sort.dart';
 import 'package:substracker/ui/subinfo/subinfo.dart';
@@ -70,8 +71,10 @@ class _SubsListState extends State<SubsList> {
 
   StreamBuilder<List<Sub>> subsListType(MyDatabase db, Box box) {
     final s = Provider.of<Sort>(context);
+    final filter = Provider.of<Filter>(context);
 
     if (s.sorts == 'all') {
+      //  print(filter.getFilter);
       return StreamBuilder(
         stream: db.getSubs(),
         builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
@@ -115,12 +118,21 @@ class _SubsListState extends State<SubsList> {
           return allSubsList(context, box, subs, db, 'EXPENSES');
         },
       );
-    } else {
+    } else if (s.sorts == 'Pending') {
       return StreamBuilder(
         stream: db.getPendingSubs(),
         builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
           final subs = snapshot.data ?? List(0);
           return allSubsList(context, box, subs, db, 'PENDING');
+        },
+      );
+    } else if (s.sorts == 'filter') {
+     
+      return StreamBuilder(
+        stream: db.getCategories(filter.getFilter),
+        builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
+          final subs = snapshot.data ?? List(0);
+          return allSubsList(context, box, subs, db, '${filter.getFilter}'.toUpperCase());
         },
       );
     }
@@ -237,7 +249,7 @@ class _SubsListState extends State<SubsList> {
             itemCount: subs.length,
             itemBuilder: (_, index) {
               final item = subs[index];
-              // print(item.toJsonString());
+              // print(item.category);
               double sum = 0;
               subs.forEach((element) {
                 sum = sum + element.subsPrice;

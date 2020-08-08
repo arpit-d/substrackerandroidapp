@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:substracker/database/hive_sub.dart';
 import 'package:substracker/database/new_sub.dart';
 import 'package:substracker/models/expenses.dart';
+import 'package:substracker/models/filter.dart';
 import 'package:substracker/models/sort.dart';
 import 'package:substracker/ui/apptheme/theme.dart';
 import 'package:substracker/ui/homepage/homepage.dart';
@@ -37,6 +38,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => Sort()),
+        ChangeNotifierProvider(create: (_) => Filter()),
         Provider(create: (_) => MyDatabase()),
         ChangeNotifierProvider(create: (_) => Expenses()),
         ChangeNotifierProvider(create: (_) => NumOfSubs()),

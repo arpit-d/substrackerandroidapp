@@ -5,7 +5,6 @@ import 'package:jiffy/jiffy.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/database/new_sub.dart';
-import 'package:substracker/ui/constants/title_c.dart';
 import 'package:substracker/ui/homepage/archived/archive_bottomsheet.dart';
 import 'package:substracker/ui/subinfo/subinfo.dart';
 
@@ -164,7 +163,7 @@ class ArchiveSubs extends StatelessWidget {
                           ),
                         ],
                         child: Card(
-                          margin: const EdgeInsets.fromLTRB(5,7,5,7),
+                          margin: const EdgeInsets.fromLTRB(5, 7, 5, 7),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),

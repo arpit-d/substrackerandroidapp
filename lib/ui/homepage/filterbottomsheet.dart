@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:substracker/database/new_sub.dart';
 import 'package:substracker/models/filter.dart';
 import 'package:substracker/models/sort.dart';
-import 'package:substracker/ui/constants/title_c.dart';
 
 class FilterBottomSheet extends StatefulWidget {
   @override
@@ -20,9 +19,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     final filter = Provider.of<Filter>(context);
     final s = Provider.of<Sort>(context);
     return Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
         buildSizedBox(context),
         GradientText(
           'Filter',

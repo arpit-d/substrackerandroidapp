@@ -46,8 +46,6 @@ LazyDatabase _openConnection() {
 class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 
-  //Stream<List<Sub>> getSubs() => select(subs).watch();
-
   Stream<List<Sub>> getSubs() {
     return (select(subs)..where((s) => s.archive.equals('false'))).watch();
   }
@@ -126,14 +124,13 @@ class MyDatabase extends _$MyDatabase {
   }
 
   @override
-  int get schemaVersion => 2; // bump because the tables have changed
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
         return m.createAll();
       }, onUpgrade: (Migrator m, int from, int to) async {
         if (from == 1) {
-          // we added the dueDate property in the change from version 1
           await m.addColumn(subs, subs.currency);
           await m.addColumn(subs, subs.archive);
         }

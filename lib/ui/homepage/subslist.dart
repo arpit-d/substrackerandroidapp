@@ -98,9 +98,9 @@ class _SubsListState extends State<SubsList> {
         builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
           final subs = snapshot.data ?? List(0);
           subs.sort((a, b) {
-            return getRealDate(a.payDate, a.periodNo, a.periodType, true)
+            return b.subsPrice
                 .compareTo(
-                    getRealDate(b.payDate, b.periodNo, b.periodType, true));
+                    a.subsPrice);
           });
           return allSubsList(context, box, subs, db, 'EXPENSES');
         },
@@ -126,13 +126,13 @@ class _SubsListState extends State<SubsList> {
           return allSubsList(context, box, subs, db, 'PENDING');
         },
       );
-    } else if (s.sorts == 'filter') {
-     
+    } else {
       return StreamBuilder(
         stream: db.getCategories(filter.getFilter),
         builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
           final subs = snapshot.data ?? List(0);
-          return allSubsList(context, box, subs, db, '${filter.getFilter}'.toUpperCase());
+          return allSubsList(
+              context, box, subs, db, '${filter.getFilter}'.toUpperCase());
         },
       );
     }

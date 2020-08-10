@@ -98,9 +98,7 @@ class _SubsListState extends State<SubsList> {
         builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
           final subs = snapshot.data ?? List(0);
           subs.sort((a, b) {
-            return b.subsPrice
-                .compareTo(
-                    a.subsPrice);
+            return b.subsPrice.compareTo(a.subsPrice);
           });
           return allSubsList(context, box, subs, db, 'EXPENSES');
         },
@@ -249,7 +247,6 @@ class _SubsListState extends State<SubsList> {
             itemCount: subs.length,
             itemBuilder: (_, index) {
               final item = subs[index];
-              // print(item.category);
               double sum = 0;
               subs.forEach((element) {
                 sum = sum + element.subsPrice;

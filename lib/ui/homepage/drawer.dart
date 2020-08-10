@@ -3,6 +3,7 @@ import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/ui/apptheme/theme.dart';
 import 'package:substracker/ui/homepage/archived/archive.dart';
+import 'package:substracker/ui/homepage/statistics/statistics_data.dart';
 import 'package:substracker/ui/settings/settings.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -42,8 +43,18 @@ class _AppDrawerState extends State<AppDrawer> {
             ),
           ),
           ListTile(
+            leading: const Icon(LineAwesomeIcons.bar_chart),
+            title: const Text('Statistics'),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => StatsData()));
+            },
+          ),
+          ListTile(
             leading: const Icon(LineAwesomeIcons.archive),
-            title: const Text('Archived '),
+            title: const Text('Archived'),
             onTap: () {
               Navigator.push(
                   context,

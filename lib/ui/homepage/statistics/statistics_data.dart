@@ -26,6 +26,17 @@ class StatsData extends StatelessWidget {
         ),
         centerTitle: true,
       ),
+      body: StatsDataBody(),
     );
+  }
+}
+
+class StatsDataBody extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Center(
+      child: Text('data'),
+    ));
   }
 }

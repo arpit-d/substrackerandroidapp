@@ -37,6 +37,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             subs.forEach((element) {
               if (element.category == null) {
               } else {
+                category.add('All');
                 category.add(element.category);
               }
               category = category.toSet().toList();
@@ -57,8 +58,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                         ActionChip(
                             label: Text(item == null ? '' : item),
                             onPressed: () {
-                              s.changeSort('filter');
-                              filter.changeFilter(item);
+                              if (item == 'All') {
+                                s.changeSort('all');
+                              } else {
+                                s.changeSort('filter');
+                                filter.changeFilter(item);
+                              }
                               Navigator.of(context).pop();
                             }),
                         SizedBox(),

@@ -17,6 +17,8 @@ class Sort with ChangeNotifier {
       sort = 'Cost';
     } else if (s == 'filter') {
       sort = 'filter';
+    } else if (s == 'pay') {
+      sort = 'pay';
     } else {
       sort = 'all';
     }

@@ -127,6 +127,15 @@ class _SubsListState extends State<SubsList> {
           return allSubsList(context, box, subs, db, 'PENDING');
         },
       );
+    } else if (s.sorts == 'pay') {
+      return StreamBuilder(
+        stream: db.getPayment(filter.getFilter),
+        builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
+          final subs = snapshot.data ?? List(0);
+          return allSubsList(
+              context, box, subs, db, '${filter.getFilter}'.toUpperCase());
+        },
+      );
     } else {
       return StreamBuilder(
         stream: db.getCategories(filter.getFilter),

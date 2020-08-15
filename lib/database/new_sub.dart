@@ -100,6 +100,10 @@ class MyDatabase extends _$MyDatabase {
     return (select(subs)..where((s) => s.category.equals(category))).watch();
   }
 
+  Stream<List<Sub>> getPayment(String payMethod) {
+    return (select(subs)..where((s) => s.payMethod.equals(payMethod))).watch();
+  }
+
   Stream<List<Sub>> getSubsByCost() {
     return (select(subs)
           ..where((s) => s.archive.equals('false'))

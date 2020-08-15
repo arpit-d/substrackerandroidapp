@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
                 topRight: const Radius.circular(10.0))),
         context: context,
         builder: (BuildContext bc) {
-          if(type == 'filter'){
+          if (type == 'filter') {
             return FilterBottomSheet();
           }
           return ModalContent();
@@ -31,9 +31,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: AppDrawer(),
-     
       appBar: AppBar(
-
         actions: <Widget>[
           Builder(builder: (BuildContext context) {
             return IconButton(

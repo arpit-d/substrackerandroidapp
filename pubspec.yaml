@@ -42,6 +42,7 @@ dependencies:
   cupertino_icons: ^0.1.3
   characters: ^1.0.0
   charts_flutter:
+  random_color:
   
 
 flutter_icons:

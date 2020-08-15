@@ -8,6 +8,7 @@ import 'package:substracker/database/new_sub.dart';
 import 'package:substracker/models/expenses.dart';
 import 'package:substracker/models/filter.dart';
 import 'package:substracker/models/sort.dart';
+import 'package:substracker/models/subsdatalist.dart';
 import 'package:substracker/ui/apptheme/theme.dart';
 import 'package:substracker/ui/homepage/homepage.dart';
 
@@ -40,6 +41,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => Sort()),
         ChangeNotifierProvider(create: (_) => Filter()),
         Provider(create: (_) => MyDatabase()),
+        Provider(create: (_) => SubsDataList()),
         ChangeNotifierProvider(create: (_) => Expenses()),
         ChangeNotifierProvider(create: (_) => NumOfSubs()),
         ChangeNotifierProvider(create: (_) => ThemeNotifier()),

@@ -9,8 +9,11 @@ import 'package:substracker/models/expenses.dart';
 import 'package:substracker/models/filter.dart';
 import 'package:substracker/models/numofsubs.dart';
 import 'package:substracker/models/sort.dart';
+import 'package:substracker/models/subsdatalist.dart';
 import 'package:substracker/ui/subinfo/subinfo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+
+import 'archived/archive.dart';
 
 class SubsList extends StatefulWidget {
   @override
@@ -140,6 +143,7 @@ class _SubsListState extends State<SubsList> {
       MyDatabase db, String name) {
     final exp = Provider.of<Expenses>(context);
     final num = Provider.of<NumOfSubs>(context);
+    final subsDataList = Provider.of<SubsDataList>(context);
     if (subs.length == 0) {
       exp.setExpenses(0);
       num.totalSubs(0);
@@ -254,7 +258,7 @@ class _SubsListState extends State<SubsList> {
 
               exp.setExpenses(sum);
               num.totalSubs(subs.length);
-
+              subsDataList.setSubList(subs);
               return Slidable(
                 actionPane: const SlidableDrawerActionPane(),
                 actionExtentRatio: 0.25,
@@ -278,6 +282,24 @@ class _SubsListState extends State<SubsList> {
                           currency: '\$',
                           archive: 'true');
                       db.updateSub(sub);
+
+                      Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text('Subscription Archived!'),
+                          action: SnackBarAction(
+                            label: 'SEE ALL ARCHIVED',
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ArchiveSubs(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      );
                     },
                   ),
                   IconSlideAction(

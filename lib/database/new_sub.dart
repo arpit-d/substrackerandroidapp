@@ -62,26 +62,34 @@ class MyDatabase extends _$MyDatabase {
   Future deleteTask(Sub sub) => delete(subs).delete(sub);
   // get all subs whose payment status equals paid
   Stream<List<Sub>> getPaidSubs() {
-    return (select(subs)..where((s) => s.payStatus.equals('Paid'))).watch();
-  }
-
-  Stream<List<Sub>> getPendingSubs() {
-    return (select(subs)..where((s) => s.payStatus.equals('Pending'))).watch();
-  }
-
-  Stream<List<Sub>> getSubsByUpcoming() {
     return (select(subs)
-          ..orderBy(
-            ([
-              (s) =>
-                  OrderingTerm(expression: s.payDate, mode: OrderingMode.asc),
-            ]),
-          ))
+          ..where(
+              (s) => s.payStatus.equals('Paid') & s.archive.equals('false')))
         .watch();
   }
 
+  Stream<List<Sub>> getPendingSubs() {
+    return (select(subs)
+          ..where(
+              (s) => s.payStatus.equals('Pending') & s.archive.equals('false')))
+        .watch();
+  }
+
+  // Stream<List<Sub>> getSubsByUpcoming() {
+  //   return (select(subs)
+  //         ..where((s) => s.archive.equals('false'))
+  //         ..orderBy(
+  //           ([
+  //             (s) =>
+  //                 OrderingTerm(expression: s.payDate, mode: OrderingMode.asc),
+  //           ]),
+  //         ))
+  //       .watch();
+  // }
+
   Stream<List<Sub>> getSubsUpcoming() {
     return (select(subs)
+          ..where((s) => s.archive.equals('false'))
           ..orderBy(([
             (s) => OrderingTerm(expression: s.payDate, mode: OrderingMode.desc)
           ])))
@@ -94,6 +102,7 @@ class MyDatabase extends _$MyDatabase {
 
   Stream<List<Sub>> getSubsByCost() {
     return (select(subs)
+          ..where((s) => s.archive.equals('false'))
           ..orderBy(([
             (s) =>
                 OrderingTerm(expression: s.subsPrice, mode: OrderingMode.desc)
@@ -101,27 +110,27 @@ class MyDatabase extends _$MyDatabase {
         .watch();
   }
 
-  Stream<List<Sub>> getAscSubs() {
-    return (select(subs)
-          ..orderBy(
-            ([
-              (s) =>
-                  OrderingTerm(expression: s.subsName, mode: OrderingMode.asc),
-            ]),
-          ))
-        .watch();
-  }
+  // Stream<List<Sub>> getAscSubs() {
+  //   return (select(subs)
+  //         ..orderBy(
+  //           ([
+  //             (s) =>
+  //                 OrderingTerm(expression: s.subsName, mode: OrderingMode.asc),
+  //           ]),
+  //         ))
+  //       .watch();
+  // }
 
-  Stream<List<Sub>> getDescSubs() {
-    return (select(subs)
-          ..orderBy(
-            ([
-              (s) =>
-                  OrderingTerm(expression: s.subsName, mode: OrderingMode.desc),
-            ]),
-          ))
-        .watch();
-  }
+  // Stream<List<Sub>> getDescSubs() {
+  //   return (select(subs)
+  //         ..orderBy(
+  //           ([
+  //             (s) =>
+  //                 OrderingTerm(expression: s.subsName, mode: OrderingMode.desc),
+  //           ]),
+  //         ))
+  //       .watch();
+  // }
 
   @override
   int get schemaVersion => 2;

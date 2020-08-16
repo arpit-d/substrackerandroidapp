@@ -19,7 +19,7 @@ class StatsData extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: GradientText(
-          'Statistics',
+          'Insights',
           gradient: const LinearGradient(colors: [
             Color(0xFFFEB692),
             Color(0xFFEA5455),
@@ -67,6 +67,8 @@ class _StatsDataBodyState extends State<StatsDataBody> {
 
     List<SubStatData> subsStat = List();
     double sum = 0;
+    double yearly = 0;
+    double weekly = 0;
 
     subs.forEach((element) {
       double monthlySpend = element.subsPrice;
@@ -81,6 +83,8 @@ class _StatsDataBodyState extends State<StatsDataBody> {
         _randomColor.randomColor(colorBrightness: ColorBrightness.dark),
       );
       sum = sum + monthlySpend;
+      yearly = sum * 12;
+      weekly = yearly / 52.1429;
       subsStat.add(a);
     });
 
@@ -99,54 +103,101 @@ class _StatsDataBodyState extends State<StatsDataBody> {
           data: subsStat),
     ];
 
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.05,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const Text(
-                'MONTHLY EXPENSES -',
-                style: const TextStyle(
-                  fontSize: 20,
+    return Center(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.92,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.1,
+            ),
+            Container(
+              height: h * 0.27,
+              child: charts.PieChart(
+                series,
+                animate: true,
+                defaultRenderer: charts.ArcRendererConfig(
+                  arcWidth: 62,
+                  arcRendererDecorators: [
+                    charts.ArcLabelDecorator(
+                        outsideLabelStyleSpec: theme.darkTheme
+                            ? charts.TextStyleSpec(
+                                color: charts.MaterialPalette.white,
+                                fontSize: 13)
+                            : charts.TextStyleSpec(
+                                color: charts.MaterialPalette.black,
+                                fontSize: 13),
+                        labelPosition: charts.ArcLabelPosition.outside)
+                  ],
                 ),
-              ),
-              Text(
-                sum.toString() + '\$',
-                style: const TextStyle(
-                  fontSize: 20,
-                ),
-              )
-            ],
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.03,
-          ),
-          Container(
-            height: h * 0.27,
-            child: charts.PieChart(
-              series,
-              animate: true,
-              defaultRenderer: charts.ArcRendererConfig(
-                arcWidth: 62,
-                arcRendererDecorators: [
-                  charts.ArcLabelDecorator(
-                      outsideLabelStyleSpec: theme.darkTheme
-                          ? charts.TextStyleSpec(
-                              color: charts.MaterialPalette.white, fontSize: 13)
-                          : charts.TextStyleSpec(
-                              color: charts.MaterialPalette.black,
-                              fontSize: 13),
-                      labelPosition: charts.ArcLabelPosition.outside)
-                ],
               ),
             ),
-          )
-        ],
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'AVG WEEKLY EXPENSES -',
+                  style: const TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                Text(
+                  weekly.toStringAsFixed(2) + '\$',
+                  style: const TextStyle(
+                    fontSize: 20,
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'AVG MONTHLY EXPENSES -',
+                  style: const TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                Text(
+                  sum.toStringAsFixed(2) + '\$',
+                  style: const TextStyle(
+                    fontSize: 20,
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'AVG YEARLY EXPENSES -',
+                  style: const TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                Text(
+                  yearly.toStringAsFixed(2) + '\$',
+                  style: const TextStyle(
+                    fontSize: 20,
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
+            ),
+          ],
+        ),
       ),
     );
   }

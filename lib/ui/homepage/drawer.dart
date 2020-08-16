@@ -44,7 +44,7 @@ class _AppDrawerState extends State<AppDrawer> {
           ),
           ListTile(
             leading: const Icon(LineAwesomeIcons.bar_chart),
-            title: const Text('Statistics'),
+            title: const Text('Insights'),
             onTap: () {
               Navigator.push(
                   context,

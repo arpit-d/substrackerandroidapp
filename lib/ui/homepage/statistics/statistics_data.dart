@@ -67,20 +67,26 @@ class _StatsDataBodyState extends State<StatsDataBody> {
 
     List<SubStatData> subsStat = List();
     double sum = 0;
+
     subs.forEach((element) {
-      var a = SubStatData(
+      double monthlySpend = element.subsPrice;
+      if (element.periodType == 'Month') {
+        monthlySpend = monthlySpend / int.parse(element.periodNo);
+      } else if (element.periodType == 'Year') {
+        monthlySpend = monthlySpend / (12 * int.parse(element.periodNo));
+      }
+      SubStatData a = SubStatData(
         element.subsName,
-        element.subsPrice.toString(),
+        monthlySpend.toString(),
         _randomColor.randomColor(colorBrightness: ColorBrightness.dark),
       );
-      sum = sum + element.subsPrice;
+      sum = sum + monthlySpend;
       subsStat.add(a);
     });
-    print(sum.toString());
 
     List<charts.Series<SubStatData, String>> series = List();
     series = [
-      new charts.Series<SubStatData, String>(
+      charts.Series<SubStatData, String>(
           colorFn: (SubStatData s, _) => (s.color),
           domainFn: (SubStatData s, _) => (s.subsPrice),
           measureFn: (SubStatData s, _) => double.parse(s.subsPrice),
@@ -97,7 +103,29 @@ class _StatsDataBodyState extends State<StatsDataBody> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Text('Monthly Spending: '),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.05,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const Text(
+                'MONTHLY EXPENSES -',
+                style: const TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+              Text(
+                sum.toString() + '\$',
+                style: const TextStyle(
+                  fontSize: 20,
+                ),
+              )
+            ],
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.03,
+          ),
           Container(
             height: h * 0.27,
             child: charts.PieChart(

@@ -1,13 +1,3 @@
-import 'dart:math';
-
-class BackendService {
-  static Future<List> getSuggestions(String query) async {
-    return List.generate(3, (index) {
-      return {'name': query + index.toString(), 'price': Random().nextInt(100)};
-    });
-  }
-}
-
 class NamesService {
   static final List<String> names = [
     'Netflix',

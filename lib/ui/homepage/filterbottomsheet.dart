@@ -19,7 +19,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     final filter = Provider.of<Filter>(context);
     final s = Provider.of<Sort>(context);
     return Column(
-    //  mainAxisSize: MainAxisSize.min,
+      //  mainAxisSize: MainAxisSize.min,
       children: [
         buildSizedBox(context),
         GradientText(
@@ -46,7 +46,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             // print(category);
             return Expanded(
               child: ListView.builder(
-                shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 itemCount: category.length,
                 itemBuilder: (_, index) {
@@ -65,7 +64,9 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                             }
                             Navigator.of(context).pop();
                           }),
-                      SizedBox(),
+                      SizedBox(
+                        width: 15,
+                      ),
                     ],
                   );
                 },

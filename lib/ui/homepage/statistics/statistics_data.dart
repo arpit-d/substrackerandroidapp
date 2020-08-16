@@ -81,10 +81,9 @@ class _StatsDataBodyState extends State<StatsDataBody> {
     List<charts.Series<SubStatData, String>> series = List();
     series = [
       new charts.Series<SubStatData, String>(
-          colorFn: (SubStatData clickData, _) => (clickData.color),
-          domainFn: (SubStatData clickData, _) => (clickData.subsPrice),
-          measureFn: (SubStatData clickData, _) =>
-              double.parse(clickData.subsPrice),
+          colorFn: (SubStatData s, _) => (s.color),
+          domainFn: (SubStatData s, _) => (s.subsPrice),
+          measureFn: (SubStatData s, _) => double.parse(s.subsPrice),
           id: 'Stats',
           labelAccessorFn: (SubStatData s, _) =>
               ' ${s.subsName} ' +
@@ -98,7 +97,7 @@ class _StatsDataBodyState extends State<StatsDataBody> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Text('aaa'),
+          Text('Monthly Spending: '),
           Container(
             height: h * 0.27,
             child: charts.PieChart(

@@ -9,6 +9,7 @@ import 'package:substracker/database/new_sub.dart';
 import 'package:substracker/suggestions/name_data.dart';
 
 enum PaymentStatus { paid, pending }
+enum Notification { oneDay, sameDay }
 
 class NewSubForm extends StatefulWidget {
   @override
@@ -21,6 +22,7 @@ class _NewSubFormState extends State<NewSubForm> {
   // controller
   final TextEditingController _typeAheadController = TextEditingController();
   TextEditingController dateCtl = TextEditingController();
+  TextEditingController notiCtl = TextEditingController();
 
   // var declaration
   final Color cursorColor = const Color(0xFFEA5455);
@@ -30,7 +32,9 @@ class _NewSubFormState extends State<NewSubForm> {
   String periodNo = '1';
   String periodType = 'Month';
   PaymentStatus _c = PaymentStatus.paid;
+  Notification _n = Notification.oneDay;
   String payStatus = 'Paid';
+  String noti = "One";
   String category, notes, payMethod;
 
   FocusNode myFocusNode,
@@ -356,6 +360,81 @@ class _NewSubFormState extends State<NewSubForm> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.008,
                   ),
+                  TextFormField(
+                    //validator: (val) => val.isEmpty ? 'Enter date!' : null,
+                    controller: notiCtl,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(LineAwesomeIcons.bell),
+                      labelText: 'Notification Alert',
+                    ),
+                    readOnly: true,
+                    onTap: () {
+                      return showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Create Notification Alert'),
+                            content: StatefulBuilder(builder:
+                                (BuildContext context, StateSetter setState) {
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  ListTile(
+                                    title: const Text('One Day Before'),
+                                    leading: Radio(
+                                      activeColor: const Color(0xFFEA5455),
+                                      value: Notification.oneDay,
+                                      groupValue: _n,
+                                      onChanged: (Notification value) {
+                                        setState(() {
+                                          noti = 'One';
+                                          _n = value;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  ListTile(
+                                    title: const Text('Same Day'),
+                                    leading: Radio(
+                                      activeColor: const Color(0xFFEA5455),
+                                      value: Notification.sameDay,
+                                      groupValue: _n,
+                                      onChanged: (Notification value) {
+                                        setState(() {
+                                          noti = 'Same';
+                                          _n = value;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: const Text('Approve'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      ).then((value) {
+                        if (noti == "One") {
+                          notiCtl.text = "One Day Before";
+                        } else {
+                          notiCtl.text = "Same Day";
+                        }
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.008,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.008,
+                  ),
                   const Text(
                     'PAYMENT STATUS',
                     style: const TextStyle(fontSize: 18),
@@ -416,8 +495,10 @@ class _NewSubFormState extends State<NewSubForm> {
                       child: Center(
                         child: const Text(
                           'SAVE SUBSCRIPTION',
-                          style:
-                              const TextStyle(color: const Color(0xFFF1f1f1)),
+                          style: const TextStyle(
+                              color: const Color(0xFFF1f1f1),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
                         ),
                       ),
                     ),

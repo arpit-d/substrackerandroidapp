@@ -428,8 +428,7 @@ class _SubInfoState extends State<SubInfo> {
                               child: Center(
                                 child: const Text(
                                   'SAVE SUBSCRIPTION',
-                                  style: const TextStyle(
-                                      color: const Color(0xFFF1f1f1)),
+                                  style: const TextStyle(color: const Color(0xFFF1f1f1), fontWeight: FontWeight.bold, fontSize: 18),
                                 ),
                               ),
                             ),

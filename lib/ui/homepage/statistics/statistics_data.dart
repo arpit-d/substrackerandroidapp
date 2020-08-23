@@ -58,7 +58,7 @@ class _StatsDataBodyState extends State<StatsDataBody> {
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
+   // double w = MediaQuery.of(context).size.width;
     final subsProvider = Provider.of<SubsDataList>(context);
     final theme = Provider.of<ThemeNotifier>(context);
 

@@ -17,13 +17,6 @@ class _ModalContentState extends State<ModalContent> {
     return Consumer<Sort>(
         builder: (BuildContext context, Sort s, Widget child) {
       return Container(
-        //  height: MediaQuery.of(context).size.height*0.3,
-        decoration: BoxDecoration(
-            //color: Colors.white,
-            borderRadius: BorderRadius.only(
-                topLeft: const Radius.circular(10.0),
-                topRight: const Radius.circular(10.0))),
-        //height: MediaQuery.of(context).size.width * 0.92,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

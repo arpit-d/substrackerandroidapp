@@ -12,9 +12,13 @@ class NotificationManager {
     return flutterLocalNotificationsPlugin;
   }
 
+  deleteNoti() async {
+    await flutterLocalNotificationsPlugin.cancelAll();
+  }
+
   void initNotifications() {
     var initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/launcher_icon');
+        AndroidInitializationSettings('@drawable/noti');
 
     var initializationSettingsIOS = IOSInitializationSettings(
         onDidReceiveLocalNotification: onDidReceiveLocalNotification);

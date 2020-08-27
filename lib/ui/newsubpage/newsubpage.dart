@@ -34,7 +34,7 @@ class _NewSubFormState extends State<NewSubForm> {
   String periodNo = '1';
   String periodType = 'Month';
   PaymentStatus _c = PaymentStatus.paid;
-  Notification _n = Notification.oneDay;
+  Notification _n;
   String payStatus = 'Paid';
   String noti = "One";
   String category, notes, payMethod;
@@ -522,6 +522,7 @@ class _NewSubFormState extends State<NewSubForm> {
                             currency: '\$',
                             archive: 'false');
                         db.insertSub(sub);
+
                         if (noti == "One") {
                           DateTime realDays;
                           print(payDate.toIso8601String());
@@ -530,15 +531,23 @@ class _NewSubFormState extends State<NewSubForm> {
                           if (periodType == 'Day') {
                             realDays = Jiffy(d).add(
                                 days: int.parse(periodNo),
-                                hours: 16,
-                                minutes: 47);
+                                hours: 21,
+                                minutes: 00);
                           } else if (periodType == 'Week') {
-                            realDays = Jiffy(d).add(weeks: int.parse(periodNo));
+                            realDays = Jiffy(d).add(
+                                weeks: int.parse(periodNo),
+                                hours: 21,
+                                minutes: 0);
                           } else if (periodType == 'Year') {
-                            realDays = Jiffy(d).add(years: int.parse(periodNo));
+                            realDays = Jiffy(d).add(
+                                years: int.parse(periodNo),
+                                hours: 21,
+                                minutes: 0);
                           } else {
-                            realDays =
-                                Jiffy(d).add(months: int.parse(periodNo));
+                            realDays = Jiffy(d).add(
+                                months: int.parse(periodNo),
+                                hours: 21,
+                                minutes: 0);
                           }
 
                           _manager.noti(realDays.subtract(Duration(days: 1)),
@@ -551,15 +560,23 @@ class _NewSubFormState extends State<NewSubForm> {
                           if (periodType == 'Day') {
                             realDays = Jiffy(d).add(
                                 days: int.parse(periodNo),
-                                hours: 0,
-                                minutes: 24);
+                                hours: 7,
+                                minutes: 0);
                           } else if (periodType == 'Week') {
-                            realDays = Jiffy(d).add(weeks: int.parse(periodNo));
+                            realDays = Jiffy(d).add(
+                                weeks: int.parse(periodNo),
+                                hours: 7,
+                                minutes: 0);
                           } else if (periodType == 'Year') {
-                            realDays = Jiffy(d).add(years: int.parse(periodNo));
+                            realDays = Jiffy(d).add(
+                                years: int.parse(periodNo),
+                                hours: 7,
+                                minutes: 0);
                           } else {
-                            realDays =
-                                Jiffy(d).add(months: int.parse(periodNo));
+                            realDays = Jiffy(d).add(
+                                months: int.parse(periodNo),
+                                hours: 7,
+                                minutes: 0);
                           }
 
                           _manager.noti(realDays, name, "Today");

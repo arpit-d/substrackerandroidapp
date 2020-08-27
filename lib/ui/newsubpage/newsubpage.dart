@@ -530,8 +530,8 @@ class _NewSubFormState extends State<NewSubForm> {
                           if (periodType == 'Day') {
                             realDays = Jiffy(d).add(
                                 days: int.parse(periodNo),
-                                hours: 13,
-                                minutes: 6);
+                                hours: 16,
+                                minutes: 47);
                           } else if (periodType == 'Week') {
                             realDays = Jiffy(d).add(weeks: int.parse(periodNo));
                           } else if (periodType == 'Year') {
@@ -551,8 +551,8 @@ class _NewSubFormState extends State<NewSubForm> {
                           if (periodType == 'Day') {
                             realDays = Jiffy(d).add(
                                 days: int.parse(periodNo),
-                                hours: 13,
-                                minutes: 6);
+                                hours: 0,
+                                minutes: 24);
                           } else if (periodType == 'Week') {
                             realDays = Jiffy(d).add(weeks: int.parse(periodNo));
                           } else if (periodType == 'Year') {
@@ -561,7 +561,7 @@ class _NewSubFormState extends State<NewSubForm> {
                             realDays =
                                 Jiffy(d).add(months: int.parse(periodNo));
                           }
-                          print(realDays.toIso8601String());
+
                           _manager.noti(realDays, name, "Today");
                         }
 

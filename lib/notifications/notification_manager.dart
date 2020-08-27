@@ -15,6 +15,7 @@ class NotificationManager {
   void initNotifications() {
     var initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/launcher_icon');
+
     var initializationSettingsIOS = IOSInitializationSettings(
         onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
@@ -27,11 +28,14 @@ class NotificationManager {
 
   getPlatformChannelSpecfics() {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        '1', 'Reminder', 'Subscription Payment Reminder',
-        importance: Importance.Max,
-        priority: Priority.Max,
-        ticker: 'Subscription Trackr',
-        visibility: NotificationVisibility.Public);
+      '1',
+      'Reminder',
+      'Subscription Payment Reminder',
+      importance: Importance.Max,
+      priority: Priority.Max,
+      ticker: 'Subscription Trackr',
+      visibility: NotificationVisibility.Public,
+    );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
@@ -67,7 +71,8 @@ class NotificationManager {
         'Please Pay Your Bill For $subsName Which Ends $time',
         scheduledNotificationDateTime,
         platformChannelSpecifics);
-        print('Notification set at'+scheduledNotificationDateTime.toIso8601String());
+    print('Notification set at' +
+        scheduledNotificationDateTime.toIso8601String());
   }
 
   void removeReminder(int notificationId) {

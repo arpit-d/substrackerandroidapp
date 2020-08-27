@@ -43,7 +43,7 @@ dependencies:
   characters: ^1.0.0
   charts_flutter:
   random_color:
-  flutter_local_notifications:
+  flutter_local_notifications: ^1.4.0
   
 
 flutter_icons:

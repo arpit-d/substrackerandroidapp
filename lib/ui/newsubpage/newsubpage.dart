@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:gradient_text/gradient_text.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/database/new_sub.dart';
+import 'package:substracker/notifications/notification_manager.dart';
 import 'package:substracker/suggestions/name_data.dart';
 
 enum PaymentStatus { paid, pending }
@@ -66,8 +68,9 @@ class _NewSubFormState extends State<NewSubForm> {
     myFocusNode5.dispose();
     super.dispose();
   }
-  // keys
 
+  // keys
+  NotificationManager _manager = NotificationManager();
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -361,7 +364,6 @@ class _NewSubFormState extends State<NewSubForm> {
                     height: MediaQuery.of(context).size.height * 0.008,
                   ),
                   TextFormField(
-                    //validator: (val) => val.isEmpty ? 'Enter date!' : null,
                     controller: notiCtl,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(LineAwesomeIcons.bell),
@@ -412,7 +414,7 @@ class _NewSubFormState extends State<NewSubForm> {
                             }),
                             actions: <Widget>[
                               FlatButton(
-                                child: const Text('Approve'),
+                                child: const Text('Set Reminder'),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
@@ -520,6 +522,48 @@ class _NewSubFormState extends State<NewSubForm> {
                             currency: '\$',
                             archive: 'false');
                         db.insertSub(sub);
+                        if (noti == "One") {
+                          DateTime realDays;
+                          print(payDate.toIso8601String());
+                          DateTime d = payDate;
+                          print(d.toIso8601String());
+                          if (periodType == 'Day') {
+                            realDays = Jiffy(d).add(
+                                days: int.parse(periodNo),
+                                hours: 13,
+                                minutes: 6);
+                          } else if (periodType == 'Week') {
+                            realDays = Jiffy(d).add(weeks: int.parse(periodNo));
+                          } else if (periodType == 'Year') {
+                            realDays = Jiffy(d).add(years: int.parse(periodNo));
+                          } else {
+                            realDays =
+                                Jiffy(d).add(months: int.parse(periodNo));
+                          }
+
+                          _manager.noti(realDays.subtract(Duration(days: 1)),
+                              name, "Tomorrow");
+                        } else {
+                          DateTime realDays;
+
+                          DateTime d = payDate;
+
+                          if (periodType == 'Day') {
+                            realDays = Jiffy(d).add(
+                                days: int.parse(periodNo),
+                                hours: 13,
+                                minutes: 6);
+                          } else if (periodType == 'Week') {
+                            realDays = Jiffy(d).add(weeks: int.parse(periodNo));
+                          } else if (periodType == 'Year') {
+                            realDays = Jiffy(d).add(years: int.parse(periodNo));
+                          } else {
+                            realDays =
+                                Jiffy(d).add(months: int.parse(periodNo));
+                          }
+                          print(realDays.toIso8601String());
+                          _manager.noti(realDays, name, "Today");
+                        }
 
                         Navigator.of(context).pop();
 

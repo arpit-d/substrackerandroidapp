@@ -6,8 +6,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/models/dateformat.dart';
-import 'package:substracker/models/sort.dart';
 import 'package:substracker/ui/constants/title_c.dart';
+import 'package:substracker/widgets/titleText.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 enum DateFormat { ddMMyy, MMddyy }
@@ -68,50 +68,47 @@ class _SettingsPageState extends State<SettingsPage> {
               subtitle: WatchBoxBuilder(
                 box: Hive.box('subs'),
                 builder: (context, s) {
-                  return Text(s.get('dateFormat'));
+                  return Text(s.get('dateFormat', defaultValue: 'dd/MM/yy'));
                 },
               ),
               onTap: () async {
                 return showModalBottomSheet(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: const BorderRadius.only(
-                          topLeft: const Radius.circular(10.0),
-                          topRight: const Radius.circular(10.0))),
-                  context: context,
-                  builder: (BuildContext bc) {
-                    return Consumer<DateFormatChanger>(builder:
-                        (BuildContext context,
-                            DateFormatChanger dateFormatChanger, Widget child) {
+                    shape: RoundedRectangleBorder(
+                        borderRadius: const BorderRadius.only(
+                            topLeft: const Radius.circular(10.0),
+                            topRight: const Radius.circular(10.0))),
+                    context: context,
+                    builder: (BuildContext bc) {
                       return StatefulBuilder(builder:
                           (BuildContext context, StateSetter setState) {
                         return Container(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              GradientText(
-                                'Filter',
-                                gradient: LinearGradient(
-                                    colors: [Colors.red, Colors.blue]),
-                                style: const TextStyle(
-                                    fontSize: 25,
-                                    letterSpacing: 1.4,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                              SizedBox(
+                                  height: MediaQuery.of(context).size.height *
+                                      0.02),
+                              TitleText('Date Format'),
+                              SizedBox(
+                                  height: MediaQuery.of(context).size.height *
+                                      0.02),
+                              Divider(),
                               ListTile(
                                 title: const Text('dd/MM/yy'),
                                 leading: Radio(
                                   activeColor: const Color(0xFFEA5455),
                                   value: DateFormat.ddMMyy,
-                                  groupValue: box.get('dateFormat')=='dd/MM/yy'?DateFormat.ddMMyy:DateFormat.MMddyy,
+                                  groupValue:
+                                      box.get('dateFormat') == 'dd/MM/yy'
+                                          ? DateFormat.ddMMyy
+                                          : DateFormat.MMddyy,
                                   onChanged: (value) {
                                     setState(() {
                                       dateFormatType = 'dd/MM/yy';
                                       format = DateFormat.ddMMyy;
                                       box.put('dateFormat', 'dd/MM/yy');
                                     });
-
-                                    // dateFormatChanger
-                                    //     .setDateFormat(dateFormatType);
+                                    Navigator.of(context).pop();
                                   },
                                 ),
                               ),
@@ -120,17 +117,17 @@ class _SettingsPageState extends State<SettingsPage> {
                                 leading: Radio(
                                   activeColor: const Color(0xFFEA5455),
                                   value: DateFormat.MMddyy,
-                                  groupValue: box.get('dateFormat')=='dd/MM/yy'?DateFormat.ddMMyy:DateFormat.MMddyy,
+                                  groupValue:
+                                      box.get('dateFormat') == 'dd/MM/yy'
+                                          ? DateFormat.ddMMyy
+                                          : DateFormat.MMddyy,
                                   onChanged: (value) {
                                     setState(() {
-                                      dateFormatType = 'MM/dd/yy';
+                                      //  dateFormatType = 'MM/dd/yy';
                                       format = DateFormat.MMddyy;
                                       box.put('dateFormat', 'MM/dd/yy');
                                     });
-                                    // print(box.get('dateFormat'));
-
-                                    // dateFormatChanger
-                                    //     .setDateFormat(dateFormatType);
+                                    Navigator.of(context).pop();
                                   },
                                 ),
                               ),
@@ -139,8 +136,6 @@ class _SettingsPageState extends State<SettingsPage> {
                         );
                       });
                     });
-                  },
-                );
               },
             ),
             const Divider(),

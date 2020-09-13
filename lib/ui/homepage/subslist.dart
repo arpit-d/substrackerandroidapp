@@ -23,7 +23,8 @@ class SubsList extends StatefulWidget {
 }
 
 class _SubsListState extends State<SubsList> {
-  getRealDate(DateTime d, String pNo, String pType, bool sortType, String dateFormat) {
+  getRealDate(
+      DateTime d, String pNo, String pType, bool sortType, String dateFormat) {
     DateTime realDays;
     if (pType == 'Day') {
       realDays = Jiffy(d).add(days: int.parse(pNo));
@@ -48,9 +49,8 @@ class _SubsListState extends State<SubsList> {
     if (sortType == true) {
       return realDays;
     }
-    
 
-    var r = 'Next Payment: '+DateFormat(dateFormat).format(realDays);
+    var r = 'Next Payment: ' + DateFormat(dateFormat).format(realDays);
     return r.toString();
   }
 
@@ -78,10 +78,8 @@ class _SubsListState extends State<SubsList> {
   StreamBuilder<List<Sub>> subsListType(MyDatabase db, Box box) {
     final s = Provider.of<Sort>(context);
     final filter = Provider.of<Filter>(context);
-    final dF = Provider.of<DateFormatChanger>(context);
 
     if (s.sorts == 'all') {
-      //  print(filter.getFilter);
       return StreamBuilder(
         stream: db.getSubs(),
         builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
@@ -116,9 +114,10 @@ class _SubsListState extends State<SubsList> {
         builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
           final subs = snapshot.data ?? List(0);
           subs.sort((a, b) {
-            return getRealDate(a.payDate, a.periodNo, a.periodType, true, box.get('dateFormat') )
-                .compareTo(
-                    getRealDate(b.payDate, b.periodNo, b.periodType, true,box.get('dateFormat')));
+            return getRealDate(a.payDate, a.periodNo, a.periodType, true,
+                    box.get('dateFormat'))
+                .compareTo(getRealDate(b.payDate, b.periodNo, b.periodType,
+                    true, box.get('dateFormat')));
           });
           return allSubsList(context, box, subs, db, 'EXPENSES');
         },

@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'dart:math';
 
 class NotificationManager {
   var flutterLocalNotificationsPlugin;
@@ -44,10 +45,14 @@ class NotificationManager {
     print('hello');
   }
 
-  Future noti(DateTime d, String subsName, String time) async {
-    var scheduledNotificationDateTime = d;
+  Future noti(DateTime d, String subsName, String time, String price) async {
+    var random = Random.secure();
+
+    var value = random.nextInt(1000000000);
+    var scheduledNotificationDateTime =
+        DateTime.now().add(Duration(seconds: 10));
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      '1',
+      '$subsName',
       'Reminder',
       'Subscription Payment Reminder',
       importance: Importance.Max,
@@ -58,9 +63,9 @@ class NotificationManager {
     NotificationDetails platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.schedule(
-        1,
+        value,
         'Subsription Payment Reminder',
-        'Please Pay Your Bill For $subsName Which Ends $time',
+        'Please Pay Your Bill of $price For $subsName Which Ends $time',
         scheduledNotificationDateTime,
         platformChannelSpecifics);
     print('Notification set at' +

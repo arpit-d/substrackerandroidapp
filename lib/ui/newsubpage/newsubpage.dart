@@ -552,7 +552,7 @@ class _NewSubFormState extends State<NewSubForm> {
                           }
 
                           _manager.noti(realDays.subtract(Duration(days: 1)),
-                              name, "Tomorrow");
+                              name, "Tomorrow", price.toString());
                         } else {
                           DateTime realDays;
 
@@ -580,7 +580,7 @@ class _NewSubFormState extends State<NewSubForm> {
                                 minutes: 0);
                           }
 
-                          _manager.noti(realDays, name, "Today");
+                          _manager.noti(realDays, name, "Today", price.toString());
                         }
 
                         Navigator.of(context).pop();

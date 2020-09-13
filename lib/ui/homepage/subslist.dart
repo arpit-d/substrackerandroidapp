@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/database/new_sub.dart';
+import 'package:substracker/models/dateformat.dart';
 import 'package:substracker/models/expenses.dart';
 import 'package:substracker/models/filter.dart';
 import 'package:substracker/models/numofsubs.dart';
@@ -21,7 +23,7 @@ class SubsList extends StatefulWidget {
 }
 
 class _SubsListState extends State<SubsList> {
-  getRealDate(DateTime d, String pNo, String pType, bool sortType) {
+  getRealDate(DateTime d, String pNo, String pType, bool sortType, String dateFormat) {
     DateTime realDays;
     if (pType == 'Day') {
       realDays = Jiffy(d).add(days: int.parse(pNo));
@@ -46,8 +48,9 @@ class _SubsListState extends State<SubsList> {
     if (sortType == true) {
       return realDays;
     }
+    
 
-    var r = 'Next Payment: ${realDays.day}-${realDays.month}-${realDays.year}';
+    var r = 'Next Payment: '+DateFormat(dateFormat).format(realDays);
     return r.toString();
   }
 
@@ -75,6 +78,7 @@ class _SubsListState extends State<SubsList> {
   StreamBuilder<List<Sub>> subsListType(MyDatabase db, Box box) {
     final s = Provider.of<Sort>(context);
     final filter = Provider.of<Filter>(context);
+    final dF = Provider.of<DateFormatChanger>(context);
 
     if (s.sorts == 'all') {
       //  print(filter.getFilter);
@@ -112,9 +116,9 @@ class _SubsListState extends State<SubsList> {
         builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
           final subs = snapshot.data ?? List(0);
           subs.sort((a, b) {
-            return getRealDate(a.payDate, a.periodNo, a.periodType, true)
+            return getRealDate(a.payDate, a.periodNo, a.periodType, true, box.get('dateFormat') )
                 .compareTo(
-                    getRealDate(b.payDate, b.periodNo, b.periodType, true));
+                    getRealDate(b.payDate, b.periodNo, b.periodType, true,box.get('dateFormat')));
           });
           return allSubsList(context, box, subs, db, 'EXPENSES');
         },
@@ -153,13 +157,17 @@ class _SubsListState extends State<SubsList> {
     final exp = Provider.of<Expenses>(context);
     final num = Provider.of<NumOfSubs>(context);
     final subsDataList = Provider.of<SubsDataList>(context);
+    final dF = Provider.of<DateFormatChanger>(context);
     if (subs.length == 0) {
-      exp.setExpenses(0);
-      num.totalSubs(0);
+      // exp.setExpenses(0);
+      // num.totalSubs(0);
       return Center(
         child: Container(
           child: const Text(
-              'You Have Not Added Any Subscriptions Yet. \n Click On The Below Button To Start!'),
+            '''You Have Not Added Any Subscriptions Yet. 
+          Click On The Below Icon To Start!''',
+            style: const TextStyle(fontSize: 18),
+          ),
         ),
       );
     }
@@ -379,7 +387,7 @@ class _SubsListState extends State<SubsList> {
                       children: [
                         Text(
                           getRealDate(item.payDate, item.periodNo,
-                              item.periodType, false),
+                              item.periodType, false, box.get('dateFormat')),
                           style: const TextStyle(fontSize: 16),
                         ),
                         Text(item.periodNo.toString() == '1'

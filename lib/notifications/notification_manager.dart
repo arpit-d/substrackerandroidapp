@@ -26,25 +26,12 @@ class NotificationManager {
     var initializationSettings = InitializationSettings(
         initializationSettingsAndroid, initializationSettingsIOS);
 
-    flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: onSelectNotification);
-  }
-
-  getPlatformChannelSpecfics() {
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      '1',
-      'Reminder',
-      'Subscription Payment Reminder',
-      importance: Importance.Max,
-      priority: Priority.Max,
-      ticker: 'Subscription Trackr',
-      visibility: NotificationVisibility.Public,
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onSelectNotification: onSelectNotification,
+      // onDidReceiveLocalNotification: onDidReceiveLocalNotification(
+      //     1, 'Reminder', 'Subscription Payment Reminder', 'test')
     );
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-
-    return platformChannelSpecifics;
   }
 
   Future onSelectNotification(String payload) async {
@@ -54,7 +41,7 @@ class NotificationManager {
 
   Future onDidReceiveLocalNotification(
       int id, String title, String body, String payload) async {
-    return Future.value(1);
+    print('hello');
   }
 
   Future noti(DateTime d, String subsName, String time) async {
@@ -64,6 +51,7 @@ class NotificationManager {
       'Reminder',
       'Subscription Payment Reminder',
       importance: Importance.Max,
+      visibility: NotificationVisibility.Public,
       priority: Priority.Max,
     );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();

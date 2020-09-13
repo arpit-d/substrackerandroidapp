@@ -11,7 +11,6 @@ class HomePage extends StatelessWidget {
   void _bottSheet(context, String type) async {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
-            // side: BorderSide.canMerge(a, b)
             borderRadius: const BorderRadius.only(
                 topLeft: const Radius.circular(10.0),
                 topRight: const Radius.circular(10.0))),

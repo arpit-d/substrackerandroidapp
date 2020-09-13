@@ -7,6 +7,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/database/new_sub.dart';
+import 'package:substracker/models/subsdatalist.dart';
 import 'package:substracker/notifications/notification_manager.dart';
 import 'package:substracker/suggestions/name_data.dart';
 
@@ -74,6 +75,7 @@ class _NewSubFormState extends State<NewSubForm> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final subsDataList = Provider.of<SubsDataList>(context);
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -123,6 +125,7 @@ class _NewSubFormState extends State<NewSubForm> {
                   buildSizedBox(context),
                   TypeAheadFormField(
                     hideOnEmpty: true,
+                    keepSuggestionsOnLoading: false,
                     getImmediateSuggestions: false,
                     textFieldConfiguration: TextFieldConfiguration(
                       cursorColor: cursorColor,
@@ -234,7 +237,6 @@ class _NewSubFormState extends State<NewSubForm> {
                   ),
                   buildSizedBox(context),
                   Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
                         flex: 1,
@@ -242,7 +244,6 @@ class _NewSubFormState extends State<NewSubForm> {
                           cursorColor: cursorColor,
                           onChanged: (v) {
                             periodNo = v;
-                            // print(periodNo);
                           },
                           textAlign: TextAlign.center,
                           textInputAction: TextInputAction.next,

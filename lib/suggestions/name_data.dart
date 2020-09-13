@@ -16,6 +16,8 @@ class NamesService {
     'Money Control',
     'Times Of India',
     'The Hindu',
+    'Starbucks',
+    'Tim Hortons',
     'Economic Times',
     'Flipkart Plus',
     'Medical Insurance',

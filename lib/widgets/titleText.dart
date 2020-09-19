@@ -9,7 +9,7 @@ class TitleText extends StatelessWidget {
   Widget build(BuildContext context) {
     return GradientText(
       '$title',
-      gradient: titleGradient,
+      gradient: gradient,
       style: const TextStyle(
           fontSize: 25, letterSpacing: 1.4, fontWeight: FontWeight.bold),
     );

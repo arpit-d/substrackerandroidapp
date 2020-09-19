@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:substracker/ui/apptheme/theme.dart';
 import 'package:substracker/ui/homepage/bottomsheetmenu.dart';
-import 'package:substracker/ui/homepage/drawer.dart';
+import 'package:substracker/ui/homepage/statistics/statistics_data.dart';
 import 'package:substracker/ui/homepage/subslist.dart';
 import 'package:substracker/ui/newsubpage/newsubpage.dart';
 import 'package:substracker/ui/homepage/filterbottomsheet.dart';
+import 'package:substracker/ui/settings/settings.dart';
+
+import 'archived/archive.dart';
 
 class HomePage extends StatelessWidget {
   void _bottSheet(context, String type) async {
     showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-            borderRadius: const BorderRadius.only(
-                topLeft: const Radius.circular(10.0),
-                topRight: const Radius.circular(10.0))),
         context: context,
         builder: (BuildContext bc) {
           if (type == 'filter') {
@@ -29,7 +30,64 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: AppDrawer(),
+      key: scaffoldKey,
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [c1, c2]),
+              ),
+              child: Container(),
+            ),
+            Consumer<ThemeNotifier>(
+              builder: (context, notifier, child) => SwitchListTile(
+                secondary: const Icon(LineAwesomeIcons.moon_o),
+                activeColor: c2,
+                title: const Text("Dark Mode"),
+                onChanged: (val) {
+                  notifier.toggleTheme();
+                },
+                value: notifier.darkTheme,
+              ),
+            ),
+            ListTile(
+              leading: const Icon(LineAwesomeIcons.bar_chart),
+              title: const Text('Insights'),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => StatsData()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(LineAwesomeIcons.archive),
+              title: const Text('Archived'),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => ArchiveSubs()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(LineAwesomeIcons.cog),
+              title: const Text('Settings'),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => SettingsPage()));
+              },
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         actions: <Widget>[
           Builder(builder: (BuildContext context) {
@@ -66,7 +124,7 @@ class HomePage extends StatelessWidget {
             return IconButton(
               icon: const Icon(LineAwesomeIcons.bars),
               tooltip: 'Open Drawer',
-              onPressed: () => Scaffold.of(context).openDrawer(),
+              onPressed: () => scaffoldKey.currentState.openDrawer(),
             );
           },
         ),

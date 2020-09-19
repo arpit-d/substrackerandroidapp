@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:gradient_text/gradient_text.dart';
+import 'package:hive/hive.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/database/new_sub.dart';
-import 'package:substracker/models/subsdatalist.dart';
 import 'package:substracker/notifications/notification_manager.dart';
 import 'package:substracker/suggestions/name_data.dart';
+import 'package:intl/intl.dart';
 
 enum PaymentStatus { paid, pending }
-enum Notification { oneDay, sameDay }
+enum Notification { none, oneDay, sameDay }
 
 class NewSubForm extends StatefulWidget {
   @override
@@ -35,7 +36,7 @@ class _NewSubFormState extends State<NewSubForm> {
   String periodNo = '1';
   String periodType = 'Month';
   PaymentStatus _c = PaymentStatus.paid;
-  Notification _n;
+  Notification _n = Notification.none;
   String payStatus = 'Paid';
   String noti = "One";
   String category, notes, payMethod;
@@ -75,7 +76,8 @@ class _NewSubFormState extends State<NewSubForm> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final subsDataList = Provider.of<SubsDataList>(context);
+    final box = Hive.box('subs');
+    String format = box.get('dateFormat', defaultValue: 'dd/MM/yy');
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -229,8 +231,7 @@ class _NewSubFormState extends State<NewSubForm> {
                         (v) {
                           FocusScope.of(context).requestFocus(myFocusNode1);
                           payDate = v;
-                          dateCtl.text =
-                              '${payDate.day} - ${payDate.month} - ${payDate.year}';
+                          dateCtl.text = DateFormat(format).format(payDate);
                         },
                       );
                     },
@@ -383,6 +384,20 @@ class _NewSubFormState extends State<NewSubForm> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   ListTile(
+                                    title: const Text('No Alerts'),
+                                    leading: Radio(
+                                      activeColor: const Color(0xFFEA5455),
+                                      value: Notification.none,
+                                      groupValue: _n,
+                                      onChanged: (Notification value) {
+                                        setState(() {
+                                          noti = 'No';
+                                          _n = value;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  ListTile(
                                     title: const Text('One Day Before'),
                                     leading: Radio(
                                       activeColor: const Color(0xFFEA5455),
@@ -426,8 +441,10 @@ class _NewSubFormState extends State<NewSubForm> {
                       ).then((value) {
                         if (noti == "One") {
                           notiCtl.text = "One Day Before";
-                        } else {
+                        } else if (noti == "Same") {
                           notiCtl.text = "Same Day";
+                        } else {
+                          notiCtl.text = 'No Alerts';
                         }
                       });
                     },
@@ -553,7 +570,7 @@ class _NewSubFormState extends State<NewSubForm> {
 
                           _manager.noti(realDays.subtract(Duration(days: 1)),
                               name, "Tomorrow", price.toString());
-                        } else {
+                        } else if (noti == "Same") {
                           DateTime realDays;
 
                           DateTime d = payDate;
@@ -579,8 +596,14 @@ class _NewSubFormState extends State<NewSubForm> {
                                 hours: 7,
                                 minutes: 0);
                           }
-
-                          _manager.noti(realDays, name, "Today", price.toString());
+                            for(int a = 0; a<12;a++){
+                              _manager.noti(
+                              realDays, name, "Today", price.toString());
+                            }
+                          // _manager.noti(
+                          //     realDays, name, "Today", price.toString());
+                        } else {
+                          print('no noti');
                         }
 
                         Navigator.of(context).pop();

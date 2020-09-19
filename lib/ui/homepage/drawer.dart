@@ -19,6 +19,7 @@ class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
@@ -26,10 +27,7 @@ class _AppDrawerState extends State<AppDrawer> {
             decoration: BoxDecoration(
               gradient: LinearGradient(colors: [c1, c2]),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: const <Widget>[],
-            ),
+            child: Container(),
           ),
           Consumer<ThemeNotifier>(
             builder: (context, notifier, child) => SwitchListTile(
@@ -46,6 +44,7 @@ class _AppDrawerState extends State<AppDrawer> {
             leading: const Icon(LineAwesomeIcons.bar_chart),
             title: const Text('Insights'),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                   context,
                   MaterialPageRoute(

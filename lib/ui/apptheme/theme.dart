@@ -58,8 +58,8 @@ const MaterialColor primarySwatch =
 const String FONT_NAME = 'Rubik';
 
 ThemeData lightTheme = ThemeData(
-    inputDecorationTheme: InputDecorationTheme(
-      labelStyle: TextStyle(color: const Color(0xFF696969)),
+    inputDecorationTheme: const InputDecorationTheme(
+      labelStyle: TextStyle(color: Color(0xFF696969)),
       focusedBorder: const OutlineInputBorder(
         borderSide: const BorderSide(
           color: const Color(0xFFEA5455),
@@ -85,6 +85,19 @@ ThemeData lightTheme = ThemeData(
     iconTheme: const IconThemeData(color: const Color(0xFF2d2d2d)),
     primarySwatch: primarySwatch,
     scaffoldBackgroundColor: const Color(0xFFFFFFFF),
+    cardTheme: CardTheme(
+      elevation: 1,
+      margin: const EdgeInsets.fromLTRB(0, 7, 0, 7),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+    ),
+    bottomSheetTheme: BottomSheetThemeData(
+      shape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.only(
+              topLeft: const Radius.circular(10.0),
+              topRight: const Radius.circular(10.0))),
+    ),
     appBarTheme: const AppBarTheme(
       iconTheme: const IconThemeData(color: const Color(0xFF2d2d2d)),
       elevation: 0,
@@ -95,11 +108,27 @@ ThemeData lightTheme = ThemeData(
     textSelectionHandleColor: const Color(0xFF2d2d2d),
     primaryColor: const Color(0xFFEA5455),
     fontFamily: FONT_NAME,
+    dialogTheme: const DialogTheme(
+      shape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.all(
+        const Radius.circular(10.0),
+      )),
+    ),
     pageTransitionsTheme: pageTransitionsTheme);
 
 ThemeData darkTheme = ThemeData(
-    inputDecorationTheme: InputDecorationTheme(
-      labelStyle: TextStyle(color: const Color(0xFFC0C0C0)),
+  buttonTheme: ButtonThemeData(
+    
+  ),
+    dialogTheme: const DialogTheme(
+      backgroundColor: const Color(0xFF111111),
+      shape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.all(
+        const Radius.circular(10.0),
+      )),
+    ),
+    inputDecorationTheme: const InputDecorationTheme(
+      labelStyle: TextStyle(color: Color(0xFFC0C0C0)),
       focusedBorder: const OutlineInputBorder(
         borderSide: const BorderSide(
           color: const Color(0xFFEA5455),
@@ -125,9 +154,21 @@ ThemeData darkTheme = ThemeData(
     textSelectionHandleColor: const Color(0xFFFFFFFF),
     canvasColor: const Color(0xFF101010),
     backgroundColor: const Color(0xFF000000),
-    bottomSheetTheme:
-        BottomSheetThemeData(modalBackgroundColor: const Color(0xFF101010)),
+    bottomSheetTheme: BottomSheetThemeData(
+      modalBackgroundColor: const Color(0xFF101010),
+      shape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.only(
+              topLeft: const Radius.circular(10.0),
+              topRight: const Radius.circular(10.0))),
+    ),
     cardColor: const Color(0xFF111111),
+    cardTheme: CardTheme(
+      elevation: 3,
+      margin: const EdgeInsets.fromLTRB(0, 7, 0, 7),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+    ),
     fontFamily: FONT_NAME,
     scaffoldBackgroundColor: const Color(0xFF000000),
     appBarTheme: const AppBarTheme(

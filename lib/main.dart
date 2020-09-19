@@ -5,7 +5,6 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:provider/provider.dart';
 import 'package:substracker/database/hive_sub.dart';
 import 'package:substracker/database/new_sub.dart';
-import 'package:substracker/models/dateformat.dart';
 import 'package:substracker/models/expenses.dart';
 import 'package:substracker/models/filter.dart';
 import 'package:substracker/models/sort.dart';
@@ -45,10 +44,8 @@ class _MyAppState extends State<MyApp> {
         Provider(create: (_) => MyDatabase()),
         Provider(create: (_) => SubsDataList()),
         ChangeNotifierProvider(create: (_) => Expenses()),
-        ChangeNotifierProvider(create: (_) => DateFormatChanger()),
         ChangeNotifierProvider(create: (_) => NumOfSubs()),
         ChangeNotifierProvider(create: (_) => ThemeNotifier()),
-        // ChangeNotifierProvider(create: (_) => PaidExpenses()),
       ],
       child: MaterialApWidget(
         title: _title,
@@ -64,10 +61,8 @@ class _MyAppState extends State<MyApp> {
 }
 
 class MaterialApWidget extends StatelessWidget {
-  const MaterialApWidget({
-    Key key,
-    @required String title,
-  })  : _title = title,
+  const MaterialApWidget({Key key, @required String title})
+      : _title = title,
         super(key: key);
 
   final String _title;

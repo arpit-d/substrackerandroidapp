@@ -4,8 +4,6 @@ import 'package:gradient_text/gradient_text.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
-import 'package:provider/provider.dart';
-import 'package:substracker/models/dateformat.dart';
 import 'package:substracker/ui/constants/title_c.dart';
 import 'package:substracker/widgets/titleText.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -43,12 +41,14 @@ class _SettingsPageState extends State<SettingsPage> {
         leading: IconButton(
           icon: const Icon(LineAwesomeIcons.arrow_left),
           tooltip: 'Go Back',
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         centerTitle: true,
         title: GradientText(
           'Settings',
-          gradient: titleGradient,
+          gradient: gradient,
           style: const TextStyle(
               fontSize: 32,
               fontFamily: 'Allura',
@@ -94,14 +94,15 @@ class _SettingsPageState extends State<SettingsPage> {
                                       0.02),
                               Divider(),
                               ListTile(
-                                title: const Text('dd/MM/yy'),
+                                title: const Text('dd/MM/yy (Day/Month/Year)'),
                                 leading: Radio(
                                   activeColor: const Color(0xFFEA5455),
                                   value: DateFormat.ddMMyy,
-                                  groupValue:
-                                      box.get('dateFormat') == 'dd/MM/yy'
-                                          ? DateFormat.ddMMyy
-                                          : DateFormat.MMddyy,
+                                  groupValue: box.get('dateFormat',
+                                              defaultValue: 'dd/MM/yy') ==
+                                          'dd/MM/yy'
+                                      ? DateFormat.ddMMyy
+                                      : DateFormat.MMddyy,
                                   onChanged: (value) {
                                     setState(() {
                                       dateFormatType = 'dd/MM/yy';
@@ -113,14 +114,15 @@ class _SettingsPageState extends State<SettingsPage> {
                                 ),
                               ),
                               ListTile(
-                                title: const Text('MM/dd/yy'),
+                                title: const Text('MM/dd/yy (Month/Day/Year)'),
                                 leading: Radio(
                                   activeColor: const Color(0xFFEA5455),
                                   value: DateFormat.MMddyy,
-                                  groupValue:
-                                      box.get('dateFormat') == 'dd/MM/yy'
-                                          ? DateFormat.ddMMyy
-                                          : DateFormat.MMddyy,
+                                  groupValue: box.get('dateFormat',
+                                              defaultValue: 'dd/MM/yy') ==
+                                          'dd/MM/yy'
+                                      ? DateFormat.ddMMyy
+                                      : DateFormat.MMddyy,
                                   onChanged: (value) {
                                     setState(() {
                                       //  dateFormatType = 'MM/dd/yy';

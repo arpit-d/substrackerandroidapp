@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_text/gradient_text.dart';
+import 'package:hive/hive.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/database/new_sub.dart';
 import 'package:substracker/ui/constants/form_c.dart';
+
+import 'package:intl/intl.dart';
 
 enum PaymentStatus { paid, pending }
 
@@ -43,6 +46,8 @@ class _SubInfoState extends State<SubInfo> {
   @override
   Widget build(BuildContext context) {
     final db = Provider.of<MyDatabase>(context, listen: false);
+    final box = Hive.box('subs');
+    String format = box.get('dateFormat', defaultValue: 'dd/MM/yy');
 
     if (widget.payStatus == 'Paid') {
       _c = PaymentStatus.paid;
@@ -72,6 +77,7 @@ class _SubInfoState extends State<SubInfo> {
         ),
         centerTitle: true,
         actions: [
+          IconButton(icon: const Icon(LineAwesomeIcons.bell), onPressed: () {}),
           IconButton(
               icon: const Icon(LineAwesomeIcons.trash),
               tooltip: 'Delete',
@@ -274,8 +280,10 @@ class _SubInfoState extends State<SubInfo> {
                                       );
                                     },
                                     child: Text(widget.payDate == null
-                                        ? '${widget.firstPayment.day} - ${widget.firstPayment.month} - ${widget.firstPayment.year}'
-                                        : ('${widget.payDate.day} - ${widget.payDate.month} - ${widget.payDate.year}')),
+                                        ? DateFormat(format)
+                                            .format(widget.firstPayment)
+                                        : DateFormat(format)
+                                            .format(widget.payDate)),
                                   ),
                                 )
                               ],
@@ -428,7 +436,10 @@ class _SubInfoState extends State<SubInfo> {
                               child: Center(
                                 child: const Text(
                                   'SAVE SUBSCRIPTION',
-                                  style: const TextStyle(color: const Color(0xFFF1f1f1), fontWeight: FontWeight.bold, fontSize: 18),
+                                  style: const TextStyle(
+                                      color: const Color(0xFFF1f1f1),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
                                 ),
                               ),
                             ),

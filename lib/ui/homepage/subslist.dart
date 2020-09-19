@@ -6,7 +6,6 @@ import 'package:jiffy/jiffy.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/database/new_sub.dart';
-import 'package:substracker/models/dateformat.dart';
 import 'package:substracker/models/expenses.dart';
 import 'package:substracker/models/filter.dart';
 import 'package:substracker/models/numofsubs.dart';
@@ -115,9 +114,9 @@ class _SubsListState extends State<SubsList> {
           final subs = snapshot.data ?? List(0);
           subs.sort((a, b) {
             return getRealDate(a.payDate, a.periodNo, a.periodType, true,
-                    box.get('dateFormat'))
+                    box.get('dateFormat', defaultValue: 'dd/MM/yy'))
                 .compareTo(getRealDate(b.payDate, b.periodNo, b.periodType,
-                    true, box.get('dateFormat')));
+                    true, box.get('dateFormat', defaultValue: 'dd/MM/yy')));
           });
           return allSubsList(context, box, subs, db, 'EXPENSES');
         },
@@ -156,7 +155,7 @@ class _SubsListState extends State<SubsList> {
     final exp = Provider.of<Expenses>(context);
     final num = Provider.of<NumOfSubs>(context);
     final subsDataList = Provider.of<SubsDataList>(context);
-    final dF = Provider.of<DateFormatChanger>(context);
+
     if (subs.length == 0) {
       // exp.setExpenses(0);
       // num.totalSubs(0);
@@ -352,10 +351,6 @@ class _SubsListState extends State<SubsList> {
                   ),
                 ],
                 child: Card(
-                  margin: const EdgeInsets.fromLTRB(0, 7, 0, 7),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
                   child: ListTile(
                     onTap: () => Navigator.push(
                         context,
@@ -385,8 +380,12 @@ class _SubsListState extends State<SubsList> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          getRealDate(item.payDate, item.periodNo,
-                              item.periodType, false, box.get('dateFormat')),
+                          getRealDate(
+                              item.payDate,
+                              item.periodNo,
+                              item.periodType,
+                              false,
+                              box.get('dateFormat', defaultValue: 'dd/MM/yy')),
                           style: const TextStyle(fontSize: 16),
                         ),
                         Text(item.periodNo.toString() == '1'

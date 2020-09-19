@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_text/gradient_text.dart';
-import 'package:substracker/ui/constants/title_c.dart';
+import 'package:substracker/widgets/titleText.dart';
 
 class ArchiveBottomSheet extends StatelessWidget {
   @override
@@ -17,15 +16,7 @@ class ArchiveBottomSheet extends StatelessWidget {
         children: [
           buildSizedBox(context),
           Center(
-            child: GradientText(
-              'Archived Subscriptions',
-              gradient: titleGradient,
-              style: const TextStyle(
-                  fontSize: 25,
-                  //fontFamily: 'Allura',
-                  letterSpacing: 1.4,
-                  fontWeight: FontWeight.bold),
-            ),
+            child: TitleText('Archived'),
           ),
           buildSizedBox(context),
           Divider(),

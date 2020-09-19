@@ -22,7 +22,7 @@ class NotificationManager {
         AndroidInitializationSettings('@drawable/noti');
 
     var initializationSettingsIOS = IOSInitializationSettings(
-        onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+       );
 
     var initializationSettings = InitializationSettings(
         initializationSettingsAndroid, initializationSettingsIOS);
@@ -30,27 +30,21 @@ class NotificationManager {
     flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onSelectNotification: onSelectNotification,
-      // onDidReceiveLocalNotification: onDidReceiveLocalNotification(
-      //     1, 'Reminder', 'Subscription Payment Reminder', 'test')
+     
     );
   }
 
   Future onSelectNotification(String payload) async {
-    print('Notification clicked');
+    print('test');
     return Future.value(0);
   }
 
-  Future onDidReceiveLocalNotification(
-      int id, String title, String body, String payload) async {
-    print('hello');
-  }
 
   Future noti(DateTime d, String subsName, String time, String price) async {
+    var testNotiTime = DateTime.now().add(Duration(minutes: 6));
     var random = Random.secure();
-
     var value = random.nextInt(1000000000);
-    var scheduledNotificationDateTime =
-        DateTime.now().add(Duration(seconds: 10));
+    var scheduledNotificationDateTime = testNotiTime;
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       '$subsName',
       'Reminder',
@@ -58,6 +52,8 @@ class NotificationManager {
       importance: Importance.Max,
       visibility: NotificationVisibility.Public,
       priority: Priority.Max,
+      enableLights: true
+      
     );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     NotificationDetails platformChannelSpecifics = NotificationDetails(
@@ -67,7 +63,7 @@ class NotificationManager {
         'Subsription Payment Reminder',
         'Please Pay Your Bill of $price For $subsName Which Ends $time',
         scheduledNotificationDateTime,
-        platformChannelSpecifics);
+        platformChannelSpecifics, );
     print('Notification set at' +
         scheduledNotificationDateTime.toIso8601String());
   }

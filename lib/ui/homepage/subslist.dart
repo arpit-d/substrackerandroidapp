@@ -132,8 +132,7 @@ class _SubsListState extends State<SubsList> {
       return Center(
         child: Container(
           child: const Text(
-            '''You Have Not Added Any Subscriptions Yet. 
-          Click On The Below Icon To Start!''',
+            '''You Have Not Added Any Subscriptions Yet. Click On The Below Icon To Start!''',
             style: const TextStyle(fontSize: 18),
           ),
         ),

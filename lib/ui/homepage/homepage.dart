@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:substracker/functions/showSnackbar.dart';
 import 'package:substracker/ui/apptheme/theme.dart';
 import 'package:substracker/ui/homepage/bottomsheetmenu.dart';
 import 'package:substracker/ui/homepage/statistics/statistics_data.dart';
@@ -139,20 +140,28 @@ class HomePage extends StatelessWidget {
             shape: BoxShape.circle,
             gradient: LinearGradient(colors: [c1, c2]),
           ),
-          child: IconButton(
-            onPressed: () {
-              Navigator.push(
+          child: Builder(builder: (BuildContext context) {
+            return IconButton(
+              onPressed: () async {
+                final result = await Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => NewSubForm()));
-            },
-            icon: const Icon(
-              LineAwesomeIcons.pencil,
-              size: 30,
-              color: Colors.white,
-            ),
-            tooltip: 'Add New Subscription',
-          ),
+                  MaterialPageRoute(builder: (context) => NewSubForm()),
+                );
+
+                if (result == 'Success')
+                  Scaffold.of(context)
+                    ..removeCurrentSnackBar()
+                    ..showSnackBar(showSnackbar(
+                        context, 'Subscription Added Succesfully!'));
+              },
+              icon: const Icon(
+                LineAwesomeIcons.pencil,
+                size: 30,
+                color: Colors.white,
+              ),
+              tooltip: 'Add New Subscription',
+            );
+          }),
         ),
       ),
       body: SubsList(),

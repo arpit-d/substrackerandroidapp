@@ -1,10 +1,8 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:hive/hive.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/database/new_sub.dart';
@@ -605,23 +603,8 @@ class _NewSubFormState extends State<NewSubForm> {
                         //   print('no noti');
                         // }
 
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pop('Success');
 
-                        Flushbar(
-                          message: "Subscription Added Succesfully",
-                          flushbarPosition: FlushbarPosition.BOTTOM,
-                          flushbarStyle: FlushbarStyle.FLOATING,
-                          reverseAnimationCurve: Curves.decelerate,
-                          forwardAnimationCurve: Curves.ease,
-                          margin: EdgeInsets.all(8),
-                          borderRadius: 8,
-                          isDismissible: true,
-                          duration: Duration(seconds: 3),
-                          icon: const Icon(
-                            LineAwesomeIcons.check_circle,
-                            color: const Color(0xFFEA5455),
-                          ),
-                        )..show(context);
                       }
                     },
                   ),

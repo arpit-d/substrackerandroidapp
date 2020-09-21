@@ -76,6 +76,7 @@ class _NewSubFormState extends State<NewSubForm> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<MyDatabase>(context, listen: false);
     final box = Hive.box('subs');
     String format = box.get('dateFormat', defaultValue: 'dd/MM/yy');
     return Scaffold(
@@ -524,8 +525,6 @@ class _NewSubFormState extends State<NewSubForm> {
                     ),
                     onTap: () async {
                       if (_formKey.currentState.validate()) {
-                        final db =
-                            Provider.of<MyDatabase>(context, listen: false);
                         final sub = Sub(
                             id: null,
                             subsPrice: price,
@@ -541,70 +540,70 @@ class _NewSubFormState extends State<NewSubForm> {
                             archive: 'false');
                         db.insertSub(sub);
 
-                        if (noti == "One") {
-                          DateTime realDays;
-                          print(payDate.toIso8601String());
-                          DateTime d = payDate;
-                          print(d.toIso8601String());
-                          if (periodType == 'Day') {
-                            realDays = Jiffy(d).add(
-                                days: int.parse(periodNo),
-                                hours: 21,
-                                minutes: 00);
-                          } else if (periodType == 'Week') {
-                            realDays = Jiffy(d).add(
-                                weeks: int.parse(periodNo),
-                                hours: 21,
-                                minutes: 0);
-                          } else if (periodType == 'Year') {
-                            realDays = Jiffy(d).add(
-                                years: int.parse(periodNo),
-                                hours: 21,
-                                minutes: 0);
-                          } else {
-                            realDays = Jiffy(d).add(
-                                months: int.parse(periodNo),
-                                hours: 21,
-                                minutes: 0);
-                          }
+                        // if (noti == "One") {
+                        //   DateTime realDays;
+                        //   print(payDate.toIso8601String());
+                        //   DateTime d = payDate;
+                        //   print(d.toIso8601String());
+                        //   if (periodType == 'Day') {
+                        //     realDays = Jiffy(d).add(
+                        //         days: int.parse(periodNo),
+                        //         hours: 21,
+                        //         minutes: 00);
+                        //   } else if (periodType == 'Week') {
+                        //     realDays = Jiffy(d).add(
+                        //         weeks: int.parse(periodNo),
+                        //         hours: 21,
+                        //         minutes: 0);
+                        //   } else if (periodType == 'Year') {
+                        //     realDays = Jiffy(d).add(
+                        //         years: int.parse(periodNo),
+                        //         hours: 21,
+                        //         minutes: 0);
+                        //   } else {
+                        //     realDays = Jiffy(d).add(
+                        //         months: int.parse(periodNo),
+                        //         hours: 21,
+                        //         minutes: 0);
+                        //   }
 
-                          _manager.noti(realDays.subtract(Duration(days: 1)),
-                              name, "Tomorrow", price.toString());
-                        } else if (noti == "Same") {
-                          DateTime realDays;
+                        //   _manager.noti(realDays.subtract(Duration(days: 1)),
+                        //       name, "Tomorrow", price.toString());
+                        // } else if (noti == "Same") {
+                        //   DateTime realDays;
 
-                          DateTime d = payDate;
+                        //   DateTime d = payDate;
 
-                          if (periodType == 'Day') {
-                            realDays = Jiffy(d).add(
-                                days: int.parse(periodNo),
-                                hours: 7,
-                                minutes: 0);
-                          } else if (periodType == 'Week') {
-                            realDays = Jiffy(d).add(
-                                weeks: int.parse(periodNo),
-                                hours: 7,
-                                minutes: 0);
-                          } else if (periodType == 'Year') {
-                            realDays = Jiffy(d).add(
-                                years: int.parse(periodNo),
-                                hours: 7,
-                                minutes: 0);
-                          } else {
-                            realDays = Jiffy(d).add(
-                                months: int.parse(periodNo),
-                                hours: 7,
-                                minutes: 0);
-                          }
-                            for(int a = 0; a<12;a++){
-                              _manager.noti(
-                              realDays, name, "Today", price.toString());
-                            }
-                          // _manager.noti(
-                          //     realDays, name, "Today", price.toString());
-                        } else {
-                          print('no noti');
-                        }
+                        //   if (periodType == 'Day') {
+                        //     realDays = Jiffy(d).add(
+                        //         days: int.parse(periodNo),
+                        //         hours: 7,
+                        //         minutes: 0);
+                        //   } else if (periodType == 'Week') {
+                        //     realDays = Jiffy(d).add(
+                        //         weeks: int.parse(periodNo),
+                        //         hours: 7,
+                        //         minutes: 0);
+                        //   } else if (periodType == 'Year') {
+                        //     realDays = Jiffy(d).add(
+                        //         years: int.parse(periodNo),
+                        //         hours: 7,
+                        //         minutes: 0);
+                        //   } else {
+                        //     realDays = Jiffy(d).add(
+                        //         months: int.parse(periodNo),
+                        //         hours: 7,
+                        //         minutes: 0);
+                        //   }
+                        //   for (int a = 0; a < 12; a++) {
+                        //     _manager.noti(
+                        //         realDays, name, "Today", price.toString());
+                        //   }
+                        //   // _manager.noti(
+                        //   //     realDays, name, "Today", price.toString());
+                        // } else {
+                        //   print('no noti');
+                        // }
 
                         Navigator.of(context).pop();
 

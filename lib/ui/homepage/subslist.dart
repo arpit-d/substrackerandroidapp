@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';
-import 'package:intl/intl.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/database/new_sub.dart';
+import 'package:substracker/functions/getDate.dart';
 import 'package:substracker/models/expenses.dart';
 import 'package:substracker/models/filter.dart';
 import 'package:substracker/models/numofsubs.dart';
@@ -22,36 +21,7 @@ class SubsList extends StatefulWidget {
 }
 
 class _SubsListState extends State<SubsList> {
-  getRealDate(
-      DateTime d, String pNo, String pType, bool sortType, String dateFormat) {
-    DateTime realDays;
-    if (pType == 'Day') {
-      realDays = Jiffy(d).add(days: int.parse(pNo));
-    } else if (pType == 'Week') {
-      realDays = Jiffy(d).add(weeks: int.parse(pNo));
-    } else if (pType == 'Year') {
-      realDays = Jiffy(d).add(years: int.parse(pNo));
-    } else {
-      realDays = Jiffy(d).add(months: int.parse(pNo));
-    }
-    while (realDays.isBefore(DateTime.now())) {
-      if (pType == 'Day') {
-        realDays = Jiffy(realDays).add(days: int.parse(pNo));
-      } else if (pType == 'Week') {
-        realDays = Jiffy(realDays).add(weeks: int.parse(pNo));
-      } else if (pType == 'Year') {
-        realDays = Jiffy(realDays).add(years: int.parse(pNo));
-      } else {
-        realDays = Jiffy(realDays).add(months: int.parse(pNo));
-      }
-    }
-    if (sortType == true) {
-      return realDays;
-    }
-
-    var r = 'Next Payment: ' + DateFormat(dateFormat).format(realDays);
-    return r.toString();
-  }
+  
 
   final Color c1 = const Color(0xFFFEB692);
   final Color c2 = const Color(0xFFEA5455);

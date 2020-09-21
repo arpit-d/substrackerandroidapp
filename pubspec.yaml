@@ -88,18 +88,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Open Sans
-      fonts:
-        - asset: lib/assets/OpenSans-Regular.ttf
     - family: Allura
       fonts:
         - asset: lib/assets/Allura-Regular.ttf
-    - family: Poppins
-      fonts:
-        - asset: lib/assets/Poppins-Regular.ttf
-    - family: Lato
-      fonts:
-        - asset: lib/assets/Lato-Regular.ttf
     - family: Rubik
       fonts:
         - asset: lib/assets/Rubik-Regular.ttf    

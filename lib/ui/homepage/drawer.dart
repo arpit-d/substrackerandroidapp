@@ -19,7 +19,6 @@ class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
@@ -55,6 +54,7 @@ class _AppDrawerState extends State<AppDrawer> {
             leading: const Icon(LineAwesomeIcons.archive),
             title: const Text('Archived'),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -65,6 +65,7 @@ class _AppDrawerState extends State<AppDrawer> {
             leading: const Icon(LineAwesomeIcons.cog),
             title: const Text('Settings'),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                   context,
                   MaterialPageRoute(

@@ -117,9 +117,7 @@ ThemeData lightTheme = ThemeData(
     pageTransitionsTheme: pageTransitionsTheme);
 
 ThemeData darkTheme = ThemeData(
-  buttonTheme: ButtonThemeData(
-    
-  ),
+    buttonTheme: ButtonThemeData(),
     dialogTheme: const DialogTheme(
       backgroundColor: const Color(0xFF111111),
       shape: RoundedRectangleBorder(
@@ -169,6 +167,7 @@ ThemeData darkTheme = ThemeData(
         borderRadius: BorderRadius.circular(10.0),
       ),
     ),
+    snackBarTheme: SnackBarThemeData(),
     fontFamily: FONT_NAME,
     scaffoldBackgroundColor: const Color(0xFF000000),
     appBarTheme: const AppBarTheme(

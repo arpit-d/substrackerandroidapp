@@ -18,13 +18,6 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   DateFormat format = DateFormat.ddMMyy;
   String dateFormatType = 'dd/MM/yy';
-  final Uri _emailLaunchUri = Uri(
-    scheme: 'mailto',
-    path: 'btechcse3yr@gmail.com',
-    queryParameters: {
-      'subject': 'Bug report or Feature Request',
-    },
-  );
 
   getData() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -73,10 +66,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               onTap: () async {
                 return showModalBottomSheet(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: const BorderRadius.only(
-                            topLeft: const Radius.circular(10.0),
-                            topRight: const Radius.circular(10.0))),
                     context: context,
                     builder: (BuildContext bc) {
                       return StatefulBuilder(builder:
@@ -147,7 +136,14 @@ class _SettingsPageState extends State<SettingsPage> {
               subtitle:
                   const Text('Reach out here for a bug, or a feature request'),
               onTap: () async {
-                launch(_emailLaunchUri.toString());
+                var androidInfo = await DeviceInfoPlugin().androidInfo;
+                var release = androidInfo.version.release;
+                var sdkInt = androidInfo.version.sdkInt;
+                var manufacturer = androidInfo.manufacturer;
+                var model = androidInfo.model;
+                print('Android $release (SDK $sdkInt), $manufacturer $model');
+                launch(
+                    "mailto:btechcse3yr@gmail.com?subject=%5BBUG%20REPORT%5D&body=----x-x-x----%0D%0ADevice%20Info%20-%0D%0A%0D%0AAndroid%20Version%3A%20Android%20$release%0D%0ASDK%20Number%3A%20SDK%20$sdkInt%0D%0ADevice%20Manufacturer%3A%20$manufacturer%0D%0ADevice%20Model%3A%20$model%0D%0A----x-x-x----%0D%0A%0D%0AEnter%20the%20bug%2Fissue%20below%20---");
               },
             ),
             const Divider(),

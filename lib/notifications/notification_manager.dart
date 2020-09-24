@@ -44,6 +44,7 @@ class NotificationManager {
     var testNotiTime = DateTime.now().add(Duration(minutes: 6));
     var random = Random.secure();
     var value = random.nextInt(1000000000);
+    print('$value');
     var scheduledNotificationDateTime = testNotiTime;
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       '$subsName',

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_text/gradient_text.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:random_color/random_color.dart';
@@ -7,6 +6,7 @@ import 'package:substracker/database/new_sub.dart';
 import 'package:substracker/models/subsdatalist.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:substracker/ui/apptheme/theme.dart';
+import 'package:substracker/widgets/appbarTitleText.dart';
 
 class StatsData extends StatelessWidget {
   @override
@@ -18,19 +18,9 @@ class StatsData extends StatelessWidget {
           tooltip: 'Go Back',
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: GradientText(
-          'Insights',
-          gradient: const LinearGradient(colors: [
-            Color(0xFFFEB692),
-            Color(0xFFEA5455),
-          ]),
-          style: const TextStyle(
-              fontSize: 32,
-              fontFamily: 'Allura',
-              letterSpacing: 1.4,
-              fontWeight: FontWeight.bold),
+        title: AppBarTitleText(
+          title: 'Insights',
         ),
-        centerTitle: true,
       ),
       body: StatsDataBody(),
     );
@@ -43,7 +33,7 @@ class SubStatData {
   final charts.Color color;
 
   SubStatData(this.subsName, this.subsPrice, Color color)
-      : this.color = new charts.Color(
+      : this.color = charts.Color(
             r: color.red, g: color.green, b: color.blue, a: color.alpha);
 }
 

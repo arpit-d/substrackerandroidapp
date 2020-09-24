@@ -171,9 +171,10 @@ ThemeData darkTheme = ThemeData(
     fontFamily: FONT_NAME,
     scaffoldBackgroundColor: const Color(0xFF000000),
     appBarTheme: const AppBarTheme(
-      iconTheme: const IconThemeData(color: Color(0xFFFFFFFF)),
+      centerTitle: true,
+      iconTheme: IconThemeData(color: Color(0xFFFFFFFF)),
       elevation: 0,
-      color: const Color(0xFF111111),
+      color: Color(0xFF111111),
       brightness: Brightness.dark,
     ),
     primaryIconTheme: const IconThemeData(color: Color(0xFFEA5455)),

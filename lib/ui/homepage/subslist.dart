@@ -21,8 +21,6 @@ class SubsList extends StatefulWidget {
 }
 
 class _SubsListState extends State<SubsList> {
-  
-
   final Color c1 = const Color(0xFFFEB692);
   final Color c2 = const Color(0xFFEA5455);
   @override
@@ -152,41 +150,44 @@ class _SubsListState extends State<SubsList> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                height: MediaQuery.of(context).size.height * 0.13,
-                width: MediaQuery.of(context).size.width * 0.43,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Center(
-                        child: Text(
-                          '$name',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.normal,
-                              letterSpacing: 1),
+              InkWell(
+                onTap: () => print('hll'),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.13,
+                  width: MediaQuery.of(context).size.width * 0.43,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Center(
+                          child: Text(
+                            '$name',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.normal,
+                                letterSpacing: 1),
+                          ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: Align(
-                        child: Text(
-                          exp.expenses == null
-                              ? '0.00' + '\$'
-                              : exp.expenses.toStringAsFixed(2) + '\$',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.normal,
-                              letterSpacing: 1),
+                      Expanded(
+                        child: Align(
+                          child: Text(
+                            exp.expenses == null
+                                ? '0.00' + '\$'
+                                : exp.expenses.toStringAsFixed(2) + '\$',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
+                                letterSpacing: 1),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               SizedBox(width: MediaQuery.of(context).size.width * 0.002),

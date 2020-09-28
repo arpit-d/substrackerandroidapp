@@ -12,6 +12,7 @@ enum PaymentStatus { paid, pending }
 
 // ignore: must_be_immutable
 class SubInfo extends StatefulWidget {
+  DateTime createdAt;
   String name, periodType;
   double charges;
   String periodNo;
@@ -24,7 +25,8 @@ class SubInfo extends StatefulWidget {
   int id;
   double initialCharges;
   SubInfo(
-      {this.name,
+      {this.createdAt,
+        this.name,
       this.charges,
       this.periodType,
       this.periodNo,
@@ -45,6 +47,7 @@ class _SubInfoState extends State<SubInfo> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    print(widget.createdAt.toString());
     final db = Provider.of<MyDatabase>(context, listen: false);
     final box = Hive.box('subs');
     String format = box.get('dateFormat', defaultValue: 'dd/MM/yy');
@@ -209,7 +212,7 @@ class _SubInfoState extends State<SubInfo> {
                                   widget.name = v;
                                 },
                                 initialValue:
-                                    widget.name == null ? '' : widget.name,
+                                    widget.createdAt == null ? '' : widget.createdAt.toString(),
                               ),
                             ],
                           )),

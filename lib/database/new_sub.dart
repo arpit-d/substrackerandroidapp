@@ -32,6 +32,8 @@ class Subs extends Table {
   TextColumn get archive => text()();
 
   TextColumn get currency => text()();
+
+  DateTimeColumn get createdAt => dateTime().nullable()();
 }
 
 LazyDatabase _openConnection() {
@@ -137,15 +139,18 @@ class MyDatabase extends _$MyDatabase {
   // }
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
         return m.createAll();
       }, onUpgrade: (Migrator m, int from, int to) async {
+        if (from == 2) {
+          await m.addColumn(subs, subs.createdAt);
+        }
         if (from == 1) {
-          await m.addColumn(subs, subs.currency);
           await m.addColumn(subs, subs.archive);
+          await m.addColumn(subs, subs.currency);
         }
       });
 }

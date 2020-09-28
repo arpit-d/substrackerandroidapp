@@ -26,6 +26,7 @@ class _SubsListState extends State<SubsList> {
   @override
   Widget build(BuildContext context) {
     var box = Hive.box('subs');
+    
 
     final db = Provider.of<MyDatabase>(context);
     return Center(
@@ -326,6 +327,7 @@ class _SubsListState extends State<SubsList> {
                         context,
                         MaterialPageRoute(
                             builder: (BuildContext context) => SubInfo(
+                                  createdAt: item.createdAt,
                                   name: item.subsName,
                                   firstPayment: item.payDate,
                                   charges: item.subsPrice,

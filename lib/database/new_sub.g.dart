@@ -20,6 +20,7 @@ class Sub extends DataClass implements Insertable<Sub> {
   final String category;
   final String archive;
   final String currency;
+  final DateTime createdAt;
   Sub(
       {@required this.id,
       @required this.subsName,
@@ -32,7 +33,8 @@ class Sub extends DataClass implements Insertable<Sub> {
       @required this.periodType,
       this.category,
       @required this.archive,
-      @required this.currency});
+      @required this.currency,
+      this.createdAt});
   factory Sub.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -64,6 +66,8 @@ class Sub extends DataClass implements Insertable<Sub> {
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}archive']),
       currency: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}currency']),
+      createdAt: dateTimeType
+          .mapFromDatabaseResponse(data['${effectivePrefix}created_at']),
     );
   }
   @override
@@ -105,6 +109,9 @@ class Sub extends DataClass implements Insertable<Sub> {
     if (!nullToAbsent || currency != null) {
       map['currency'] = Variable<String>(currency);
     }
+    if (!nullToAbsent || createdAt != null) {
+      map['created_at'] = Variable<DateTime>(createdAt);
+    }
     return map;
   }
 
@@ -143,6 +150,9 @@ class Sub extends DataClass implements Insertable<Sub> {
       currency: currency == null && nullToAbsent
           ? const Value.absent()
           : Value(currency),
+      createdAt: createdAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdAt),
     );
   }
 
@@ -162,6 +172,7 @@ class Sub extends DataClass implements Insertable<Sub> {
       category: serializer.fromJson<String>(json['category']),
       archive: serializer.fromJson<String>(json['archive']),
       currency: serializer.fromJson<String>(json['currency']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
   @override
@@ -180,6 +191,7 @@ class Sub extends DataClass implements Insertable<Sub> {
       'category': serializer.toJson<String>(category),
       'archive': serializer.toJson<String>(archive),
       'currency': serializer.toJson<String>(currency),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
 
@@ -195,7 +207,8 @@ class Sub extends DataClass implements Insertable<Sub> {
           String periodType,
           String category,
           String archive,
-          String currency}) =>
+          String currency,
+          DateTime createdAt}) =>
       Sub(
         id: id ?? this.id,
         subsName: subsName ?? this.subsName,
@@ -209,6 +222,7 @@ class Sub extends DataClass implements Insertable<Sub> {
         category: category ?? this.category,
         archive: archive ?? this.archive,
         currency: currency ?? this.currency,
+        createdAt: createdAt ?? this.createdAt,
       );
   @override
   String toString() {
@@ -224,7 +238,8 @@ class Sub extends DataClass implements Insertable<Sub> {
           ..write('periodType: $periodType, ')
           ..write('category: $category, ')
           ..write('archive: $archive, ')
-          ..write('currency: $currency')
+          ..write('currency: $currency, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
@@ -250,8 +265,12 @@ class Sub extends DataClass implements Insertable<Sub> {
                                       periodType.hashCode,
                                       $mrjc(
                                           category.hashCode,
-                                          $mrjc(archive.hashCode,
-                                              currency.hashCode))))))))))));
+                                          $mrjc(
+                                              archive.hashCode,
+                                              $mrjc(
+                                                  currency.hashCode,
+                                                  createdAt
+                                                      .hashCode)))))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -267,7 +286,8 @@ class Sub extends DataClass implements Insertable<Sub> {
           other.periodType == this.periodType &&
           other.category == this.category &&
           other.archive == this.archive &&
-          other.currency == this.currency);
+          other.currency == this.currency &&
+          other.createdAt == this.createdAt);
 }
 
 class SubsCompanion extends UpdateCompanion<Sub> {
@@ -283,6 +303,7 @@ class SubsCompanion extends UpdateCompanion<Sub> {
   final Value<String> category;
   final Value<String> archive;
   final Value<String> currency;
+  final Value<DateTime> createdAt;
   const SubsCompanion({
     this.id = const Value.absent(),
     this.subsName = const Value.absent(),
@@ -296,6 +317,7 @@ class SubsCompanion extends UpdateCompanion<Sub> {
     this.category = const Value.absent(),
     this.archive = const Value.absent(),
     this.currency = const Value.absent(),
+    this.createdAt = const Value.absent(),
   });
   SubsCompanion.insert({
     this.id = const Value.absent(),
@@ -310,6 +332,7 @@ class SubsCompanion extends UpdateCompanion<Sub> {
     this.category = const Value.absent(),
     @required String archive,
     @required String currency,
+    this.createdAt = const Value.absent(),
   })  : subsName = Value(subsName),
         subsPrice = Value(subsPrice),
         payStatus = Value(payStatus),
@@ -331,6 +354,7 @@ class SubsCompanion extends UpdateCompanion<Sub> {
     Expression<String> category,
     Expression<String> archive,
     Expression<String> currency,
+    Expression<DateTime> createdAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -345,6 +369,7 @@ class SubsCompanion extends UpdateCompanion<Sub> {
       if (category != null) 'category': category,
       if (archive != null) 'archive': archive,
       if (currency != null) 'currency': currency,
+      if (createdAt != null) 'created_at': createdAt,
     });
   }
 
@@ -360,7 +385,8 @@ class SubsCompanion extends UpdateCompanion<Sub> {
       Value<String> periodType,
       Value<String> category,
       Value<String> archive,
-      Value<String> currency}) {
+      Value<String> currency,
+      Value<DateTime> createdAt}) {
     return SubsCompanion(
       id: id ?? this.id,
       subsName: subsName ?? this.subsName,
@@ -374,6 +400,7 @@ class SubsCompanion extends UpdateCompanion<Sub> {
       category: category ?? this.category,
       archive: archive ?? this.archive,
       currency: currency ?? this.currency,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -416,6 +443,9 @@ class SubsCompanion extends UpdateCompanion<Sub> {
     if (currency.present) {
       map['currency'] = Variable<String>(currency.value);
     }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
     return map;
   }
 
@@ -433,7 +463,8 @@ class SubsCompanion extends UpdateCompanion<Sub> {
           ..write('periodType: $periodType, ')
           ..write('category: $category, ')
           ..write('archive: $archive, ')
-          ..write('currency: $currency')
+          ..write('currency: $currency, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
@@ -577,6 +608,18 @@ class $SubsTable extends Subs with TableInfo<$SubsTable, Sub> {
     );
   }
 
+  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  GeneratedDateTimeColumn _createdAt;
+  @override
+  GeneratedDateTimeColumn get createdAt => _createdAt ??= _constructCreatedAt();
+  GeneratedDateTimeColumn _constructCreatedAt() {
+    return GeneratedDateTimeColumn(
+      'created_at',
+      $tableName,
+      true,
+    );
+  }
+
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -590,7 +633,8 @@ class $SubsTable extends Subs with TableInfo<$SubsTable, Sub> {
         periodType,
         category,
         archive,
-        currency
+        currency,
+        createdAt
       ];
   @override
   $SubsTable get asDslTable => this;
@@ -667,6 +711,10 @@ class $SubsTable extends Subs with TableInfo<$SubsTable, Sub> {
           currency.isAcceptableOrUnknown(data['currency'], _currencyMeta));
     } else if (isInserting) {
       context.missing(_currencyMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at'], _createdAtMeta));
     }
     return context;
   }

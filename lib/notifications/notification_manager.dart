@@ -21,8 +21,7 @@ class NotificationManager {
     var initializationSettingsAndroid =
         AndroidInitializationSettings('@drawable/noti');
 
-    var initializationSettingsIOS = IOSInitializationSettings(
-       );
+    var initializationSettingsIOS = IOSInitializationSettings();
 
     var initializationSettings = InitializationSettings(
         initializationSettingsAndroid, initializationSettingsIOS);
@@ -30,7 +29,6 @@ class NotificationManager {
     flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onSelectNotification: onSelectNotification,
-     
     );
   }
 
@@ -39,32 +37,26 @@ class NotificationManager {
     return Future.value(0);
   }
 
-
   Future noti(DateTime d, String subsName, String time, String price) async {
-    var testNotiTime = DateTime.now().add(Duration(minutes: 6));
-    var random = Random.secure();
-    var value = random.nextInt(1000000000);
-    print('$value');
+    var testNotiTime = DateTime.now().add(Duration(minutes: 1));
+
     var scheduledNotificationDateTime = testNotiTime;
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      '$subsName',
-      'Reminder',
-      'Subscription Payment Reminder',
-      importance: Importance.Max,
-      visibility: NotificationVisibility.Public,
-      priority: Priority.Max,
-      enableLights: true
-      
-    );
+        '$subsName', 'Reminder', 'Subscription Payment Reminder',
+        importance: Importance.Max,
+        visibility: NotificationVisibility.Public,
+        priority: Priority.Max,
+        enableLights: true);
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     NotificationDetails platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.schedule(
-        value,
-        'Subsription Payment Reminder',
-        'Please Pay Your Bill of $price For $subsName Which Ends $time',
-        scheduledNotificationDateTime,
-        platformChannelSpecifics, );
+      2147483647,
+      'Subsription Payment Reminder',
+      'Please Pay Your Bill of $price For $subsName Which Ends $time',
+      scheduledNotificationDateTime,
+      platformChannelSpecifics,
+    );
     print('Notification set at' +
         scheduledNotificationDateTime.toIso8601String());
   }

@@ -7,6 +7,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/database/new_sub.dart';
+import 'package:substracker/functions/getNotiTime.dart';
 import 'package:substracker/notifications/notification_manager.dart';
 import 'package:substracker/suggestions/name_data.dart';
 import 'package:intl/intl.dart';
@@ -39,6 +40,8 @@ class _NewSubFormState extends State<NewSubForm> {
   String payStatus = 'Paid';
   String noti = "One";
   String category, notes, payMethod;
+  DateTime createdAt;
+  TimeOfDay notificationTime;
 
   FocusNode myFocusNode,
       myFocusNode1,
@@ -50,6 +53,7 @@ class _NewSubFormState extends State<NewSubForm> {
   @override
   void initState() {
     super.initState();
+    notificationTime = TimeOfDay(hour: 21, minute: 00);
 
     myFocusNode = FocusNode();
     myFocusNode1 = FocusNode();
@@ -61,8 +65,8 @@ class _NewSubFormState extends State<NewSubForm> {
 
   @override
   void dispose() {
-    myFocusNode1.dispose();
     myFocusNode.dispose();
+    myFocusNode1.dispose();
     myFocusNode2.dispose();
     myFocusNode3.dispose();
     myFocusNode4.dispose();
@@ -73,6 +77,21 @@ class _NewSubFormState extends State<NewSubForm> {
   // keys
   NotificationManager _manager = NotificationManager();
   final _formKey = GlobalKey<FormState>();
+
+  _pickTime() async {
+    return showTimePicker(
+      initialTime: TimeOfDay.now(),
+      context: context,
+    ).then(
+      (selectedTime) async {
+        setState(() {
+          print(selectedTime);
+          notificationTime = selectedTime;
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final db = Provider.of<MyDatabase>(context, listen: false);
@@ -425,6 +444,24 @@ class _NewSubFormState extends State<NewSubForm> {
                                       },
                                     ),
                                   ),
+                                  ListTile(
+                                    title: Text(
+                                        "Time: ${notificationTime.hour}:${notificationTime.minute}"),
+                                    trailing: Icon(LineAwesomeIcons.clock_o),
+                                    onTap: () {
+                                      return showTimePicker(
+                                        initialTime: TimeOfDay(hour: 21, minute: 00),
+                                        context: context,
+                                      ).then(
+                                        (selectedTime) async {
+                                          setState(() {
+                                            print(selectedTime);
+                                            notificationTime = selectedTime;
+                                          });
+                                        },
+                                      );
+                                    },
+                                  ),
                                 ],
                               );
                             }),
@@ -524,26 +561,29 @@ class _NewSubFormState extends State<NewSubForm> {
                     ),
                     onTap: () async {
                       if (_formKey.currentState.validate()) {
+                        createdAt = DateTime.now();
                         final sub = Sub(
-                            id: null,
-                            subsPrice: price,
-                            subsName: name,
-                            notes: notes,
-                            payStatus: payStatus,
-                            payMethod: payMethod,
-                            payDate: payDate,
-                            periodNo: periodNo,
-                            periodType: periodType,
-                            category: category,
-                            currency: '\$',
-                            archive: 'false');
+                          id: null,
+                          subsPrice: price,
+                          subsName: name,
+                          notes: notes,
+                          payStatus: payStatus,
+                          payMethod: payMethod,
+                          payDate: payDate,
+                          periodNo: periodNo,
+                          periodType: periodType,
+                          category: category,
+                          currency: '\$',
+                          archive: 'false',
+                          createdAt: createdAt,
+                        );
                         db.insertSub(sub);
-
+                        getNotificationTimings(createdAt);
                         if (noti == "One") {
                           DateTime realDays;
-                          print(payDate.toIso8601String());
+
                           DateTime d = payDate;
-                          print(d.toIso8601String());
+
                           if (periodType == 'Day') {
                             realDays = Jiffy(d).add(
                                 days: int.parse(periodNo),
@@ -570,10 +610,8 @@ class _NewSubFormState extends State<NewSubForm> {
                               name, "Tomorrow", price.toString());
                         } else if (noti == "Same") {
                           DateTime realDays;
-                          
 
                           DateTime d = payDate;
-                          print(d.toIso8601String());
 
                           if (periodType == 'Day') {
                             realDays = Jiffy(d).add(

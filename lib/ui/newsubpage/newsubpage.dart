@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -11,6 +12,10 @@ import 'package:substracker/functions/getNotiTime.dart';
 import 'package:substracker/notifications/notification_manager.dart';
 import 'package:substracker/suggestions/name_data.dart';
 import 'package:intl/intl.dart';
+
+Future<void> testF(var i) async {
+  print(i + 1);
+}
 
 enum PaymentStatus { paid, pending }
 enum Notification { none, oneDay, sameDay }
@@ -38,7 +43,7 @@ class _NewSubFormState extends State<NewSubForm> {
   PaymentStatus _c = PaymentStatus.paid;
   Notification _n = Notification.none;
   String payStatus = 'Paid';
-  String noti = "One";
+  String noti;
   String category, notes, payMethod;
   DateTime createdAt;
   TimeOfDay notificationTime;
@@ -412,6 +417,7 @@ class _NewSubFormState extends State<NewSubForm> {
                                         setState(() {
                                           noti = 'No';
                                           _n = value;
+                                          print(noti);
                                         });
                                       },
                                     ),
@@ -450,7 +456,8 @@ class _NewSubFormState extends State<NewSubForm> {
                                     trailing: Icon(LineAwesomeIcons.clock_o),
                                     onTap: () {
                                       return showTimePicker(
-                                        initialTime: TimeOfDay(hour: 21, minute: 00),
+                                        initialTime:
+                                            TimeOfDay(hour: 21, minute: 00),
                                         context: context,
                                       ).then(
                                         (selectedTime) async {
@@ -562,7 +569,7 @@ class _NewSubFormState extends State<NewSubForm> {
                     onTap: () async {
                       if (_formKey.currentState.validate()) {
                         createdAt = DateTime.now();
-                        final sub = Sub(
+                        Sub sub = Sub(
                           id: null,
                           subsPrice: price,
                           subsName: name,
@@ -578,73 +585,12 @@ class _NewSubFormState extends State<NewSubForm> {
                           createdAt: createdAt,
                         );
                         db.insertSub(sub);
-                        getNotificationTimings(createdAt);
-                        if (noti == "One") {
-                          DateTime realDays;
-
-                          DateTime d = payDate;
-
-                          if (periodType == 'Day') {
-                            realDays = Jiffy(d).add(
-                                days: int.parse(periodNo),
-                                hours: 21,
-                                minutes: 00);
-                          } else if (periodType == 'Week') {
-                            realDays = Jiffy(d).add(
-                                weeks: int.parse(periodNo),
-                                hours: 21,
-                                minutes: 0);
-                          } else if (periodType == 'Year') {
-                            realDays = Jiffy(d).add(
-                                years: int.parse(periodNo),
-                                hours: 21,
-                                minutes: 0);
-                          } else {
-                            realDays = Jiffy(d).add(
-                                months: int.parse(periodNo),
-                                hours: 21,
-                                minutes: 0);
-                          }
-
-                          _manager.noti(realDays.subtract(Duration(days: 1)),
-                              name, "Tomorrow", price.toString());
-                        } else if (noti == "Same") {
-                          DateTime realDays;
-
-                          DateTime d = payDate;
-
-                          if (periodType == 'Day') {
-                            realDays = Jiffy(d).add(
-                                days: int.parse(periodNo),
-                                hours: 7,
-                                minutes: 0);
-                          } else if (periodType == 'Week') {
-                            realDays = Jiffy(d).add(
-                                weeks: int.parse(periodNo),
-                                hours: 7,
-                                minutes: 0);
-                          } else if (periodType == 'Year') {
-                            realDays = Jiffy(d).add(
-                                years: int.parse(periodNo),
-                                hours: 7,
-                                minutes: 0);
-                          } else {
-                            realDays = Jiffy(d).add(
-                                months: int.parse(periodNo),
-                                hours: 7,
-                                minutes: 0);
-                          }
-                          for (int a = 0; a < 12; a++) {
-                            _manager.noti(
-                                realDays, name, "Today", price.toString());
-                          }
-                          // _manager.noti(
-                          //     realDays, name, "Today", price.toString());
-                        } else {
-                          print('no noti');
-                        }
+                        print(noti);
 
                         Navigator.of(context).pop('Success');
+
+                        setNotification(periodType, payDate, periodNo, name,
+                            price, noti, notificationTime, createdAt);
                       }
                     },
                   ),

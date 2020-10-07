@@ -148,11 +148,12 @@ class HomePage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => NewSubForm()),
                 );
 
-                if (result == 'Success')
+                if (result == 'Success') {
                   Scaffold.of(context)
                     ..removeCurrentSnackBar()
                     ..showSnackBar(showSnackbar(
                         context, 'Subscription Added Succesfully!'));
+                }
               },
               icon: const Icon(
                 LineAwesomeIcons.pencil,

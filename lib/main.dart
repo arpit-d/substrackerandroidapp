@@ -16,12 +16,13 @@ import 'package:substracker/ui/homepage/homepage.dart';
 import 'models/numofsubs.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     // systemNavigationBarIconBrightness: Brightness.dark,
     statusBarColor: Colors.transparent,
     // systemNavigationBarColor: Colors.transparent)
   ));
-  WidgetsFlutterBinding.ensureInitialized();
+
   final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDir.path);
   Hive.registerAdapter<SubData>(SubDataAdapter());

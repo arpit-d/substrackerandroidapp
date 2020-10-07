@@ -1,5 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'dart:math';
+import 'package:substracker/database/new_sub.dart';
+import 'package:substracker/ui/settings/settings.dart';
 
 class NotificationManager {
   var flutterLocalNotificationsPlugin;
@@ -32,26 +33,30 @@ class NotificationManager {
     );
   }
 
-  Future onSelectNotification(String payload) async {
-    print('test');
-    return Future.value(0);
+  Future onSelectNotification(s) async {
+    return SettingsPage();
   }
 
-  Future noti(DateTime d, String subsName, String time, String price) async {
-    var testNotiTime = DateTime.now().add(Duration(minutes: 1));
+  Future addNotifications(int notiId, DateTime d, String subsName, String time,
+      String price) async {
+    // var testNotiTime = DateTime.now().add(Duration(minutes: 1));
 
-    var scheduledNotificationDateTime = testNotiTime;
+    var scheduledNotificationDateTime = d;
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        '$subsName', 'Reminder', 'Subscription Payment Reminder',
-        importance: Importance.Max,
-        visibility: NotificationVisibility.Public,
-        priority: Priority.Max,
-        enableLights: true);
+      '$subsName',
+      'Reminder',
+      'Subscription Payment Reminder',
+      importance: Importance.Max,
+      visibility: NotificationVisibility.Public,
+      priority: Priority.Max,
+      enableLights: true,
+      styleInformation: BigTextStyleInformation(''),
+    );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     NotificationDetails platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.schedule(
-      2147483647,
+      notiId,
       'Subsription Payment Reminder',
       'Please Pay Your Bill of $price For $subsName Which Ends $time',
       scheduledNotificationDateTime,

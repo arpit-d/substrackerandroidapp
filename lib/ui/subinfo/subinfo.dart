@@ -212,7 +212,7 @@ class _SubInfoState extends State<SubInfo> {
                                   widget.name = v;
                                 },
                                 initialValue:
-                                    widget.createdAt == null ? '' : widget.createdAt.toString(),
+                                    widget.name== null ? '' : widget.name,
                               ),
                             ],
                           )),

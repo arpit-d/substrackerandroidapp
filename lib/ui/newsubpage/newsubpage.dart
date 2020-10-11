@@ -1,15 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:hive/hive.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/database/new_sub.dart';
 import 'package:substracker/functions/getNotiTime.dart';
-import 'package:substracker/notifications/notification_manager.dart';
 import 'package:substracker/suggestions/name_data.dart';
 import 'package:intl/intl.dart';
 
@@ -26,9 +23,7 @@ class NewSubForm extends StatefulWidget {
 }
 
 class _NewSubFormState extends State<NewSubForm> {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  // controller
+  // controllers
   final TextEditingController _typeAheadController = TextEditingController();
   TextEditingController dateCtl = TextEditingController();
   TextEditingController notiCtl = TextEditingController();
@@ -46,7 +41,7 @@ class _NewSubFormState extends State<NewSubForm> {
   String noti;
   String category, notes, payMethod;
   DateTime createdAt;
-  TimeOfDay notificationTime;
+  TimeOfDay notificationTime = TimeOfDay(hour: 21, minute: 00);
 
   FocusNode myFocusNode,
       myFocusNode1,
@@ -58,7 +53,6 @@ class _NewSubFormState extends State<NewSubForm> {
   @override
   void initState() {
     super.initState();
-    notificationTime = TimeOfDay(hour: 21, minute: 00);
 
     myFocusNode = FocusNode();
     myFocusNode1 = FocusNode();
@@ -80,22 +74,8 @@ class _NewSubFormState extends State<NewSubForm> {
   }
 
   // keys
-  NotificationManager _manager = NotificationManager();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-
-  _pickTime() async {
-    return showTimePicker(
-      initialTime: TimeOfDay.now(),
-      context: context,
-    ).then(
-      (selectedTime) async {
-        setState(() {
-          print(selectedTime);
-          notificationTime = selectedTime;
-        });
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -451,8 +431,10 @@ class _NewSubFormState extends State<NewSubForm> {
                                     ),
                                   ),
                                   ListTile(
-                                    title: Text(
-                                        "Time: ${notificationTime.hour}:${notificationTime.minute}"),
+                                    title: Text(notificationTime.minute < 10 ||
+                                            notificationTime.minute == null
+                                        ? 'Time: ${notificationTime.hour}:0${notificationTime.minute}'
+                                        : 'Time: ${notificationTime.hour}:${notificationTime.minute}'),
                                     trailing: Icon(LineAwesomeIcons.clock_o),
                                     onTap: () {
                                       return showTimePicker(
@@ -463,7 +445,13 @@ class _NewSubFormState extends State<NewSubForm> {
                                         (selectedTime) async {
                                           setState(() {
                                             print(selectedTime);
-                                            notificationTime = selectedTime;
+                                            var t =
+                                                TimeOfDay(hour: 21, minute: 00);
+                                            if (selectedTime == null) {
+                                              notificationTime = t;
+                                            } else {
+                                              notificationTime = selectedTime;
+                                            }
                                           });
                                         },
                                       );
@@ -569,6 +557,7 @@ class _NewSubFormState extends State<NewSubForm> {
                     onTap: () async {
                       if (_formKey.currentState.validate()) {
                         createdAt = DateTime.now();
+
                         Sub sub = Sub(
                           id: null,
                           subsPrice: price,

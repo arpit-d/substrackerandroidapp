@@ -1,16 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:substracker/database/new_sub.dart';
 import 'package:substracker/notifications/notification_manager.dart';
 
 getNotificationTimings(DateTime createdAt, int i) {
-  String notiId = createdAt.hour.toString() +
-      createdAt.minute.toString() +
-      createdAt.second.toString() +
-      createdAt.millisecond.toString().substring(0, 2) +
-      i.toString();
+  String notiId;
+  if (createdAt.hour < 12) {
+    notiId = '-' +
+        createdAt.hour.toString() +
+        createdAt.minute.toString() +
+        createdAt.second.toString() +
+        createdAt.day.toString() +
+        i.toString();
+  } else {
+    notiId = createdAt.hour.toString() +
+        createdAt.minute.toString() +
+        createdAt.second.toString() +
+        createdAt.day.toString() +
+        i.toString();
+  }
 
   return int.parse(notiId);
+}
+
+removeNotifications(DateTime createdAt) {
+  NotificationManager _noti = NotificationManager();
+  for (int i = 0; i < 12; i++) {
+    int notiId = getNotificationTimings(createdAt, i);
+    print(notiId);
+    _noti.removeReminder(notiId);
+  }
 }
 
 Future<void> setNotification(
@@ -22,8 +40,8 @@ Future<void> setNotification(
     String noti,
     TimeOfDay notiTime,
     DateTime createdAt) async {
-  NotificationManager _noti = NotificationManager();
   DateTime realDays;
+  NotificationManager _noti = NotificationManager();
   for (int i = 0; i < 12; i++) {
     if (periodType == 'Day') {
       realDays = Jiffy(payDate).add(
@@ -43,6 +61,7 @@ Future<void> setNotification(
       );
     }
     int notiId = getNotificationTimings(createdAt, i);
+    print(notiId.toString());
 
     var a =
         realDays.add(Duration(hours: notiTime.hour, minutes: notiTime.minute));

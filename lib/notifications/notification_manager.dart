@@ -1,5 +1,4 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:substracker/database/new_sub.dart';
 import 'package:substracker/ui/settings/settings.dart';
 
 class NotificationManager {
@@ -68,5 +67,6 @@ class NotificationManager {
 
   void removeReminder(int notificationId) {
     flutterLocalNotificationsPlugin.cancel(notificationId);
+    print('Notification with $notificationId deleted');
   }
 }

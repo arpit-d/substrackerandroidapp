@@ -5,6 +5,7 @@ import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/database/new_sub.dart';
 import 'package:substracker/functions/getDate.dart';
+import 'package:substracker/functions/getNotiTime.dart';
 import 'package:substracker/models/expenses.dart';
 import 'package:substracker/models/filter.dart';
 import 'package:substracker/models/numofsubs.dart';
@@ -26,7 +27,6 @@ class _SubsListState extends State<SubsList> {
   @override
   Widget build(BuildContext context) {
     var box = Hive.box('subs');
-    
 
     final db = Provider.of<MyDatabase>(context);
     return Center(
@@ -303,9 +303,13 @@ class _SubsListState extends State<SubsList> {
                             actions: <Widget>[
                               FlatButton(
                                 child: const Text("YES"),
-                                onPressed: () {
+                                onPressed: () async {
+                                  var a = item.createdAt;
+                                  print(a);
                                   db.deleteTask(item);
+
                                   Navigator.of(context).pop();
+                                  await removeNotifications(a);
                                 },
                               ),
                               FlatButton(

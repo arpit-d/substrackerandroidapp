@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/database/new_sub.dart';
+import 'package:substracker/functions/getNotiTime.dart';
 import 'package:substracker/ui/constants/form_c.dart';
 
 import 'package:intl/intl.dart';
@@ -26,7 +27,7 @@ class SubInfo extends StatefulWidget {
   double initialCharges;
   SubInfo(
       {this.createdAt,
-        this.name,
+      this.name,
       this.charges,
       this.periodType,
       this.periodNo,
@@ -80,7 +81,7 @@ class _SubInfoState extends State<SubInfo> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(icon: const Icon(LineAwesomeIcons.bell), onPressed: () {}),
+          // IconButton(icon: const Icon(LineAwesomeIcons.bell), onPressed: () {}),
           IconButton(
               icon: const Icon(LineAwesomeIcons.trash),
               tooltip: 'Delete',
@@ -108,7 +109,10 @@ class _SubInfoState extends State<SubInfo> {
                                 periodType: widget.periodType,
                                 category: widget.category,
                                 currency: '\$',
-                                archive: 'false');
+                                archive: 'false',
+                                createdAt: widget.createdAt);
+
+                            removeNotifications(sub.createdAt);
                             db.deleteTask(sub);
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
@@ -211,8 +215,9 @@ class _SubInfoState extends State<SubInfo> {
                                 onChanged: (v) {
                                   widget.name = v;
                                 },
-                                initialValue:
-                                    widget.name== null ? '' : widget.name,
+                                initialValue: widget.name == null
+                                    ? ''
+                                    : widget.name,
                               ),
                             ],
                           )),

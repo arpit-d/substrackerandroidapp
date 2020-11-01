@@ -26,7 +26,7 @@ removeNotifications(DateTime createdAt) {
   NotificationManager _noti = NotificationManager();
   for (int i = 0; i < 12; i++) {
     int notiId = getNotificationTimings(createdAt, i);
-    print(notiId);
+    
     _noti.removeReminder(notiId);
   }
 }
@@ -61,20 +61,20 @@ Future<void> setNotification(
       );
     }
     int notiId = getNotificationTimings(createdAt, i);
-    print(notiId.toString());
+    
 
     var a =
         realDays.add(Duration(hours: notiTime.hour, minutes: notiTime.minute));
 
     if (noti == "One") {
-      print(a.subtract(Duration(days: 1)));
+     
       _noti.addNotifications(notiId, a.subtract(Duration(days: 1)), subsName,
           'Tomorrow', subsPrice.toString());
     } else if (noti == "Same") {
       await _noti.addNotifications(
           notiId, a, subsName, 'Today', subsPrice.toString());
     } else {
-      print('no');
+      
     }
     payDate = realDays;
   }

@@ -10,9 +10,6 @@ import 'package:substracker/functions/getNotiTime.dart';
 import 'package:substracker/suggestions/name_data.dart';
 import 'package:intl/intl.dart';
 
-Future<void> testF(var i) async {
-  print(i + 1);
-}
 
 enum PaymentStatus { paid, pending }
 enum Notification { none, oneDay, sameDay }
@@ -294,7 +291,7 @@ class _NewSubFormState extends State<NewSubForm> {
                             periodType.contains('.')
                                 ? periodType = null
                                 : periodType = v;
-                            // print(periodType);
+                            
                           },
                         ),
                       ),
@@ -397,7 +394,7 @@ class _NewSubFormState extends State<NewSubForm> {
                                         setState(() {
                                           noti = 'No';
                                           _n = value;
-                                          print(noti);
+                                          
                                         });
                                       },
                                     ),
@@ -444,7 +441,7 @@ class _NewSubFormState extends State<NewSubForm> {
                                       ).then(
                                         (selectedTime) async {
                                           setState(() {
-                                            print(selectedTime);
+                                            
                                             var t =
                                                 TimeOfDay(hour: 21, minute: 00);
                                             if (selectedTime == null) {
@@ -574,7 +571,7 @@ class _NewSubFormState extends State<NewSubForm> {
                           createdAt: createdAt,
                         );
                         db.insertSub(sub);
-                        print(noti);
+                        
 
                         Navigator.of(context).pop('Success');
 

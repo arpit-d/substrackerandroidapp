@@ -66,7 +66,12 @@ class _StatsDataBodyState extends State<StatsDataBody> {
         monthlySpend = monthlySpend / int.parse(element.periodNo);
       } else if (element.periodType == 'Year') {
         monthlySpend = monthlySpend / (12 * int.parse(element.periodNo));
+      } else if (element.periodType == "Week") {
+        monthlySpend = monthlySpend * (4.34524 / int.parse(element.periodNo));
+      } else if (element.periodType == "Day") {
+        monthlySpend = monthlySpend * (30 / int.parse(element.periodNo));
       }
+
       SubStatData a = SubStatData(
         element.subsName,
         monthlySpend.toString(),

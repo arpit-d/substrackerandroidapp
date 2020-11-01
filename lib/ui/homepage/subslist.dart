@@ -124,6 +124,7 @@ class _SubsListState extends State<SubsList> {
     final exp = Provider.of<Expenses>(context);
     final num = Provider.of<NumOfSubs>(context);
     final subsDataList = Provider.of<SubsDataList>(context);
+    int index = 0;
 
     if (subs.length == 0) {
       // exp.setExpenses(0);
@@ -152,7 +153,7 @@ class _SubsListState extends State<SubsList> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               InkWell(
-                onTap: () => print('hll'),
+                onTap: () {},
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.13,
                   width: MediaQuery.of(context).size.width * 0.43,
@@ -239,7 +240,20 @@ class _SubsListState extends State<SubsList> {
               final item = subs[index];
               double sum = 0;
               subs.forEach((element) {
-                sum = sum + element.subsPrice;
+                double monthlySpend = element.subsPrice;
+                if (element.periodType == 'Month') {
+                  monthlySpend = monthlySpend / int.parse(element.periodNo);
+                } else if (element.periodType == 'Year') {
+                  monthlySpend =
+                      monthlySpend / (12 * int.parse(element.periodNo));
+                } else if (element.periodType == "Week") {
+                  monthlySpend =
+                      monthlySpend * (4.34524 / int.parse(element.periodNo));
+                } else if (element.periodType == "Day") {
+                  monthlySpend =
+                      monthlySpend * (30 / int.parse(element.periodNo));
+                }
+                sum = sum + monthlySpend;
               });
 
               exp.setExpenses(sum);

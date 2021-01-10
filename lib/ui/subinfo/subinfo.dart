@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_text/gradient_text.dart';
 import 'package:hive/hive.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/database/new_sub.dart';
 import 'package:substracker/functions/getNotiTime.dart';
-import 'package:substracker/ui/constants/form_c.dart';
 
 import 'package:intl/intl.dart';
+
+import 'package:substracker/widgets/titleText.dart';
 
 enum PaymentStatus { paid, pending }
 
@@ -48,7 +48,6 @@ class _SubInfoState extends State<SubInfo> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    print(widget.createdAt.toString());
     final db = Provider.of<MyDatabase>(context, listen: false);
     final box = Hive.box('subs');
     String format = box.get('dateFormat', defaultValue: 'dd/MM/yy');
@@ -67,18 +66,7 @@ class _SubInfoState extends State<SubInfo> {
           tooltip: 'Go Back',
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: GradientText(
-          'Subscription Info',
-          gradient: const LinearGradient(colors: [
-            Color(0xFFFEB692),
-            Color(0xFFEA5455),
-          ]),
-          style: const TextStyle(
-              fontSize: 32,
-              fontFamily: 'Allura',
-              letterSpacing: 1.2,
-              fontWeight: FontWeight.bold),
-        ),
+        title: const TitleText('Subscription Info'),
         centerTitle: true,
         actions: [
           // IconButton(icon: const Icon(LineAwesomeIcons.bell), onPressed: () {}),
@@ -148,7 +136,7 @@ class _SubInfoState extends State<SubInfo> {
                         children: [
                           Center(
                             child: TextFormField(
-                              cursorColor: cursorColor,
+                              //   cursorColor: cursorColor,
                               initialValue: widget.charges == null
                                   ? ''
                                   : widget.charges.toString(),
@@ -200,6 +188,7 @@ class _SubInfoState extends State<SubInfo> {
                             height: h * 0.02,
                           ),
                           SizedBox(
+
                               // width: w * 0.87,
                               child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -211,13 +200,12 @@ class _SubInfoState extends State<SubInfo> {
                               ),
                               TextFormField(
                                 textCapitalization: TextCapitalization.words,
-                                cursorColor: cursorColor,
+                                // cursorColor: cursorColor,
                                 onChanged: (v) {
                                   widget.name = v;
                                 },
-                                initialValue: widget.name == null
-                                    ? ''
-                                    : widget.name,
+                                initialValue:
+                                    widget.name == null ? '' : widget.name,
                               ),
                             ],
                           )),
@@ -229,9 +217,12 @@ class _SubInfoState extends State<SubInfo> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Expanded(child: const Text('Frequency')),
                                 Expanded(
-                                  flex: 1,
+                                    child: const Text(
+                                  'Frequency',
+                                )),
+                                Expanded(
+                                  // flex: 1,
                                   child: DropdownButtonFormField(
                                     decoration: const InputDecoration.collapsed(
                                         hintText: ''),
@@ -357,7 +348,7 @@ class _SubInfoState extends State<SubInfo> {
                               const Text('Notes(optional)-'),
                               TextFormField(
                                 textCapitalization: TextCapitalization.words,
-                                cursorColor: cursorColor,
+                                //  cursorColor: cursorColor,
                                 initialValue:
                                     widget.notes == null ? '' : widget.notes,
                                 style: TextStyle(
@@ -385,7 +376,7 @@ class _SubInfoState extends State<SubInfo> {
                                 const Text('Payment Info(optional)-'),
                                 TextFormField(
                                   textCapitalization: TextCapitalization.words,
-                                  cursorColor: cursorColor,
+                                  //  cursorColor: cursorColor,
                                   onChanged: (v) {
                                     widget.payMethod = v;
                                   },
@@ -411,7 +402,7 @@ class _SubInfoState extends State<SubInfo> {
                                 const Text('Category(optional)-'),
                                 TextFormField(
                                   textCapitalization: TextCapitalization.words,
-                                  cursorColor: cursorColor,
+                                  //   cursorColor: cursorColor,
                                   onChanged: (v) {
                                     widget.category = v;
                                   },

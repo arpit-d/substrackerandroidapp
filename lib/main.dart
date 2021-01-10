@@ -13,6 +13,7 @@ import 'package:substracker/models/subsdatalist.dart';
 import 'package:substracker/ui/apptheme/theme.dart';
 import 'package:substracker/ui/homepage/homepage.dart';
 
+import 'models/insights_sort.dart';
 import 'models/numofsubs.dart';
 
 void main() async {
@@ -41,6 +42,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => Sort()),
+        ChangeNotifierProvider(create: (context) => InsightsSort()),
         ChangeNotifierProvider(create: (_) => Filter()),
         Provider(create: (_) => MyDatabase()),
         Provider(create: (_) => SubsDataList()),

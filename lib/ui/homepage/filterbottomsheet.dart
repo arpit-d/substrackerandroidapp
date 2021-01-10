@@ -38,7 +38,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               final subs = snapshot.data ?? List(0);
               List<String> category = List<String>();
               subs.forEach((element) {
-                if (element.category == null) {
+                if (element.category == null || element.category.isEmpty) {
                 } else {
                   category.add('All');
                   category.add(element.category);
@@ -83,7 +83,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               final subs = snapshot.data ?? List(0);
               List<String> payMethod = List<String>();
               subs.forEach((element) {
-                if (element.payMethod == null) {
+                if (element.payMethod == null || element.payMethod.isEmpty) {
                 } else {
                   payMethod.add('All');
                   payMethod.add(element.payMethod);

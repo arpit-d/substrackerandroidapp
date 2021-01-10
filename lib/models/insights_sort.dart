@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class InsightsSort extends ChangeNotifier {
-  String sortType = 'All';
+  String sortType = 'all';
   void changeSortType(String type) {
     sortType = type;
     notifyListeners();

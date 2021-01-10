@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/ui/apptheme/theme.dart';
+import 'package:substracker/ui/constants/title_c.dart';
 import 'package:substracker/ui/homepage/archived/archive.dart';
 import 'package:substracker/ui/homepage/statistics/statistics_data.dart';
+
 import 'package:substracker/ui/settings/settings.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -24,7 +26,7 @@ class _AppDrawerState extends State<AppDrawer> {
         children: <Widget>[
           DrawerHeader(
             decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [c1, c2]),
+              gradient: gradient,
             ),
             child: Container(),
           ),

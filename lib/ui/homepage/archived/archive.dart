@@ -88,7 +88,10 @@ class ArchiveSubs extends StatelessWidget {
             return Center(
               child: Container(
                 child: const Text(
-                    'You Have Not Added Any Subscriptions Yet. \n Click On The Below Button To Start!'),
+                  '''You Have Not Added Any Subscriptions Yet.''',
+                  style: const TextStyle(fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
               ),
             );
           }

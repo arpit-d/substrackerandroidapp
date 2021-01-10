@@ -25,7 +25,7 @@ getRealDate(
     }
   }
   if (sortType == true) {
-    return realDays;
+    return DateFormat(dateFormat).format(realDays);
   }
 
   var r = 'Next Payment: ' + DateFormat(dateFormat).format(realDays);

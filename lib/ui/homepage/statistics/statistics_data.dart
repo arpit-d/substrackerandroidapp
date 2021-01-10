@@ -18,6 +18,7 @@ class StatsData extends StatelessWidget {
           tooltip: 'Go Back',
           onPressed: () => Navigator.of(context).pop(),
         ),
+        actions: [],
         title: AppBarTitleText(
           title: 'Insights',
         ),
@@ -72,15 +73,15 @@ class _StatsDataBodyState extends State<StatsDataBody> {
         monthlySpend = monthlySpend * (30 / int.parse(element.periodNo));
       }
 
-      SubStatData a = SubStatData(
+      sum = sum + monthlySpend;
+      yearly = sum * 12;
+      weekly = yearly / 52.1429;
+      SubStatData _subStatData = SubStatData(
         element.subsName,
         monthlySpend.toString(),
         _randomColor.randomColor(colorBrightness: ColorBrightness.dark),
       );
-      sum = sum + monthlySpend;
-      yearly = sum * 12;
-      weekly = yearly / 52.1429;
-      subsStat.add(a);
+      subsStat.add(_subStatData);
     });
 
     List<charts.Series<SubStatData, String>> series = List();
@@ -97,6 +98,17 @@ class _StatsDataBodyState extends State<StatsDataBody> {
               '%',
           data: subsStat),
     ];
+    if (subs.length == 0) {
+      return Center(
+        child: Container(
+          child: const Text(
+            '''You Have Not Added Any Subscriptions Yet.''',
+            style: const TextStyle(fontSize: 18),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
 
     return Center(
       child: Container(

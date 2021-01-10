@@ -10,19 +10,42 @@ import 'package:substracker/functions/getNotiTime.dart';
 import 'package:substracker/suggestions/name_data.dart';
 import 'package:intl/intl.dart';
 
-
 enum PaymentStatus { paid, pending }
 enum Notification { none, oneDay, sameDay }
 
 class NewSubForm extends StatefulWidget {
+  bool editForm;
+  DateTime createdAt;
+  int initialId;
+  String initialPrice;
+  String initialName;
+  DateTime initialDate;
+  String initialPeriodNo;
+  String initialPeriodType;
+  String initialNotes;
+  String initialCategory;
+  String initialPaymentMethod;
+  String initialStatus;
+
+  NewSubForm(this.editForm,
+      [this.initialId,
+      this.initialPrice,
+      this.initialName,
+      this.initialDate,
+      this.initialPeriodNo,
+      this.initialPeriodType,
+      this.initialNotes,
+      this.initialCategory,
+      this.initialPaymentMethod,
+      this.initialStatus,
+      this.createdAt]);
   @override
   _NewSubFormState createState() => _NewSubFormState();
 }
 
 class _NewSubFormState extends State<NewSubForm> {
   // controllers
-  final TextEditingController _typeAheadController = TextEditingController();
-  TextEditingController dateCtl = TextEditingController();
+
   TextEditingController notiCtl = TextEditingController();
 
   // var declaration
@@ -39,6 +62,8 @@ class _NewSubFormState extends State<NewSubForm> {
   String category, notes, payMethod;
   DateTime createdAt;
   TimeOfDay notificationTime = TimeOfDay(hour: 21, minute: 00);
+  TextEditingController _typeAheadController = TextEditingController();
+  TextEditingController dateCtl = TextEditingController();
 
   FocusNode myFocusNode,
       myFocusNode1,
@@ -76,14 +101,19 @@ class _NewSubFormState extends State<NewSubForm> {
 
   @override
   Widget build(BuildContext context) {
-    final db = Provider.of<MyDatabase>(context, listen: false);
     final box = Hive.box('subs');
     String format = box.get('dateFormat', defaultValue: 'dd/MM/yy');
+    TextEditingController editDateCtl = TextEditingController(
+        text: widget.editForm
+            ? DateFormat(format).format(widget.initialDate)
+            : null);
+    final db = Provider.of<MyDatabase>(context, listen: false);
+
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
         title: GradientText(
-          'New Subscription',
+          widget.editForm ? 'Edit Subscription' : 'New Subscription',
           gradient: LinearGradient(colors: [
             Color(0xFFFEB692),
             Color(0xFFEA5455),
@@ -107,6 +137,7 @@ class _NewSubFormState extends State<NewSubForm> {
                 children: [
                   SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                   TextFormField(
+                    initialValue: widget.editForm ? widget.initialPrice : null,
                     cursorColor: cursorColor,
                     onFieldSubmitted: (value) =>
                         FocusScope.of(context).requestFocus(myFocusNode),
@@ -126,117 +157,209 @@ class _NewSubFormState extends State<NewSubForm> {
                     validator: (val) => val.isEmpty ? 'Enter price!' : null,
                   ),
                   buildSizedBox(context),
-                  TypeAheadFormField(
-                    hideOnEmpty: true,
-                    keepSuggestionsOnLoading: false,
-                    getImmediateSuggestions: false,
-                    textFieldConfiguration: TextFieldConfiguration(
-                      cursorColor: cursorColor,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(36),
-                      ],
-                      textCapitalization: TextCapitalization.words,
-                      onChanged: (value) {
-                        name = value;
-                      },
-                      focusNode: myFocusNode,
-                      decoration: const InputDecoration(
-                          labelText: 'Name',
-                          hintText: 'E.g. Spotify',
-                          prefixIcon: const Icon(
-                            LineAwesomeIcons.clipboard,
-                          )),
-                      controller: this._typeAheadController,
-                    ),
-                    suggestionsCallback: (pattern) {
-                      return NamesService.getSuggestions(pattern);
-                    },
-                    itemBuilder: (context, suggestion) {
-                      return Container(
-                        height: MediaQuery.of(context).size.height * 0.075,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: const Color(0xFF2d2d2d),
-                          ),
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(2)),
-                        ),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.02,
-                            ),
-                            Text(
-                              suggestion,
-                              style: TextStyle(
-                                  color: const Color(0xFFEA5455), fontSize: 17),
-                            ),
+                  widget.editForm
+                      ? TextFormField(
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(36),
                           ],
-                        ),
-                      );
-                    },
-                    transitionBuilder: (context, suggestionsBox, controller) {
-                      return suggestionsBox;
-                    },
-                    onSuggestionSelected: (suggestion) {
-                      this._typeAheadController.text = suggestion;
-                      name = suggestion;
-                    },
-                    validator: (val) => val.isEmpty ? 'Enter name!' : null,
-                    onSaved: (suggestion) {
-                      setState(() {
-                        name = suggestion;
-                      });
-                    },
-                  ),
-                  buildSizedBox(context),
-                  TextFormField(
-                    validator: (val) => val.isEmpty ? 'Enter date!' : null,
-                    controller: dateCtl,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(LineAwesomeIcons.calendar),
-                      labelText: 'Payment Date',
-                      suffixIcon: IconButton(
-                        icon: const Icon(
-                          LineAwesomeIcons.trash_o,
-                        ),
-                        onPressed: () {
-                          dateCtl.clear();
-                          FocusScope.of(context).unfocus();
-                        },
-                      ),
-                    ),
-                    readOnly: true,
-                    onTap: () {
-                      return showDatePicker(
-                        context: context,
-                        firstDate: DateTime(2000),
-                        initialDate: DateTime.now(),
-                        lastDate: DateTime(2100),
-                        builder: (context, child) {
-                          return Column(
-                            children: <Widget>[
-                              Expanded(
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.56,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.87,
-                                  child: child,
-                                ),
-                              ),
+                          textCapitalization: TextCapitalization.words,
+                          initialValue:
+                              widget.editForm ? widget.initialName : null,
+                          cursorColor: cursorColor,
+                          onFieldSubmitted: (value) =>
+                              FocusScope.of(context).requestFocus(myFocusNode),
+                          textInputAction: TextInputAction.next,
+                          focusNode: myFocusNode,
+                          decoration: const InputDecoration(
+                              labelText: 'Name',
+                              hintText: 'E.g. Spotify',
+                              prefixIcon: const Icon(
+                                LineAwesomeIcons.clipboard,
+                              )),
+                          keyboardType: TextInputType.name,
+                          onChanged: (v) {
+                            name = (v);
+                            print(name);
+                          },
+                          validator: (val) =>
+                              val.isEmpty ? 'Enter price!' : null,
+                        )
+                      : TypeAheadFormField(
+                          hideOnEmpty: true,
+                          keepSuggestionsOnLoading: false,
+                          getImmediateSuggestions: false,
+                          textFieldConfiguration: TextFieldConfiguration(
+                            cursorColor: cursorColor,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(36),
                             ],
-                          );
-                        },
-                      ).then(
-                        (v) {
-                          FocusScope.of(context).requestFocus(myFocusNode1);
-                          payDate = v;
-                          dateCtl.text = DateFormat(format).format(payDate);
-                        },
-                      );
-                    },
-                  ),
+                            textCapitalization: TextCapitalization.words,
+                            onChanged: (value) {
+                              name = value;
+                              // widget.initialName = value;
+                            },
+                            focusNode: myFocusNode,
+                            decoration: const InputDecoration(
+                                labelText: 'Name',
+                                hintText: 'E.g. Spotify',
+                                prefixIcon: const Icon(
+                                  LineAwesomeIcons.clipboard,
+                                )),
+                            controller: this._typeAheadController,
+                          ),
+                          suggestionsCallback: (pattern) {
+                            return NamesService.getSuggestions(pattern);
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return Container(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.075,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: const Color(0xFF2d2d2d),
+                                ),
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(2)),
+                              ),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.02,
+                                  ),
+                                  Text(
+                                    suggestion,
+                                    style: TextStyle(
+                                        color: const Color(0xFFEA5455),
+                                        fontSize: 17),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            this._typeAheadController.text = suggestion;
+                            name = suggestion;
+                          },
+                          validator: (val) =>
+                              val.isEmpty ? 'Enter name!' : null,
+                          onSaved: (suggestion) {
+                            setState(() {
+                              name = suggestion;
+                            });
+                          },
+                        ),
+                  buildSizedBox(context),
+                  widget.editForm
+                      ? TextFormField(
+                          validator: (val) =>
+                              val.isEmpty ? 'Enter date!' : null,
+                          controller: editDateCtl,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(LineAwesomeIcons.calendar),
+                            labelText: 'Payment Date',
+                            suffixIcon: IconButton(
+                              icon: const Icon(
+                                LineAwesomeIcons.trash_o,
+                              ),
+                              onPressed: () {
+                                editDateCtl.clear();
+                                FocusScope.of(context).unfocus();
+                              },
+                            ),
+                          ),
+                          readOnly: true,
+                          onTap: () {
+                            return showDatePicker(
+                              context: context,
+                              firstDate: DateTime(2000),
+                              initialDate: DateTime.now(),
+                              lastDate: DateTime(2100),
+                              builder: (context, child) {
+                                return Column(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.56,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.87,
+                                        child: child,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ).then(
+                              (v) {
+                                FocusScope.of(context)
+                                    .requestFocus(myFocusNode1);
+                                payDate = v;
+                                widget.initialDate = (payDate);
+                                editDateCtl.text =
+                                    DateFormat(format).format(payDate);
+                              },
+                            );
+                          },
+                        )
+                      : TextFormField(
+                          validator: (val) =>
+                              val.isEmpty ? 'Enter date!' : null,
+                          controller: dateCtl,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(LineAwesomeIcons.calendar),
+                            labelText: 'Payment Date',
+                            suffixIcon: IconButton(
+                              icon: const Icon(
+                                LineAwesomeIcons.trash_o,
+                              ),
+                              onPressed: () {
+                                dateCtl.clear();
+                                FocusScope.of(context).unfocus();
+                              },
+                            ),
+                          ),
+                          readOnly: true,
+                          onTap: () {
+                            return showDatePicker(
+                              context: context,
+                              firstDate: DateTime(2000),
+                              initialDate: DateTime.now(),
+                              lastDate: DateTime(2100),
+                              builder: (context, child) {
+                                return Column(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.56,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.87,
+                                        child: child,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ).then(
+                              (v) {
+                                FocusScope.of(context)
+                                    .requestFocus(myFocusNode1);
+                                payDate = v;
+                                dateCtl.text =
+                                    DateFormat(format).format(payDate);
+                              },
+                            );
+                          },
+                        ),
                   buildSizedBox(context),
                   Row(
                     children: [
@@ -245,7 +368,12 @@ class _NewSubFormState extends State<NewSubForm> {
                         child: TextFormField(
                           cursorColor: cursorColor,
                           onChanged: (v) {
+                            setState(() {
+                              periodNo = v;
+                              widget.initialPeriodNo = v;
+                            });
                             periodNo = v;
+                            print(periodNo);
                           },
                           textAlign: TextAlign.center,
                           textInputAction: TextInputAction.next,
@@ -253,13 +381,16 @@ class _NewSubFormState extends State<NewSubForm> {
                             FocusScope.of(context).requestFocus(myFocusNode2);
                           },
                           focusNode: myFocusNode1,
-                          validator: (val) =>
-                              (int.parse(val) == 0 || int.parse(val) == null)
-                                  ? 'Value cannot be 0!'
-                                  : null,
+                          validator: (val) => (int.parse(val) == 0 ||
+                                  int.parse(val) == null ||
+                                  val.isEmpty)
+                              ? 'Value cannot be 0 or empty!'
+                              : null,
                           decoration: InputDecoration(
                               labelText: 'Every', hintText: '1'),
-                          initialValue: '1',
+                          initialValue: widget.editForm
+                              ? widget.initialPeriodNo
+                              : periodNo,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(2),
                             WhitelistingTextInputFormatter.digitsOnly
@@ -278,7 +409,9 @@ class _NewSubFormState extends State<NewSubForm> {
                           ),
                           decoration:
                               const InputDecoration(labelText: 'Time Period'),
-                          value: 'Month',
+                          value: widget.editForm
+                              ? widget.initialPeriodType
+                              : periodType,
                           items: const <String>['Day', 'Week', 'Month', 'Year']
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
@@ -288,10 +421,13 @@ class _NewSubFormState extends State<NewSubForm> {
                           }).toList(),
                           onChanged: (v) {
                             FocusScope.of(context).requestFocus(myFocusNode2);
-                            periodType.contains('.')
-                                ? periodType = null
-                                : periodType = v;
-                            
+                            setState(() {
+                              periodType.contains('.')
+                                  ? periodType = null
+                                  : periodType = v;
+                              print(periodType);
+                              widget.initialPeriodType = v;
+                            });
                           },
                         ),
                       ),
@@ -299,6 +435,7 @@ class _NewSubFormState extends State<NewSubForm> {
                   ),
                   buildSizedBox(context),
                   TextFormField(
+                    initialValue: widget.editForm ? widget.initialNotes : null,
                     textCapitalization: TextCapitalization.sentences,
                     onFieldSubmitted: (String value) {
                       FocusScope.of(context).requestFocus(myFocusNode3);
@@ -320,6 +457,8 @@ class _NewSubFormState extends State<NewSubForm> {
                   ),
                   buildSizedBox(context),
                   TextFormField(
+                    initialValue:
+                        widget.editForm ? widget.initialCategory : null,
                     textCapitalization: TextCapitalization.words,
                     onFieldSubmitted: (String value) {
                       FocusScope.of(context).requestFocus(myFocusNode4);
@@ -341,6 +480,8 @@ class _NewSubFormState extends State<NewSubForm> {
                   ),
                   buildSizedBox(context),
                   TextFormField(
+                    initialValue:
+                        widget.editForm ? widget.initialPaymentMethod : null,
                     cursorColor: cursorColor,
                     textCapitalization: TextCapitalization.words,
                     focusNode: myFocusNode4,
@@ -366,118 +507,126 @@ class _NewSubFormState extends State<NewSubForm> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.008,
                   ),
-                  TextFormField(
-                    controller: notiCtl,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(LineAwesomeIcons.bell),
-                      labelText: 'Notification Alert',
-                    ),
-                    readOnly: true,
-                    onTap: () {
-                      return showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Create Notification Alert'),
-                            content: StatefulBuilder(builder:
-                                (BuildContext context, StateSetter setState) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  ListTile(
-                                    title: const Text('No Alerts'),
-                                    leading: Radio(
-                                      activeColor: const Color(0xFFEA5455),
-                                      value: Notification.none,
-                                      groupValue: _n,
-                                      onChanged: (Notification value) {
-                                        setState(() {
-                                          noti = 'No';
-                                          _n = value;
-                                          
-                                        });
+                  !widget.editForm
+                      ? TextFormField(
+                          controller: notiCtl,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(LineAwesomeIcons.bell),
+                            labelText: 'Notification Alert',
+                          ),
+                          readOnly: true,
+                          onTap: () {
+                            return showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Create Notification Alert'),
+                                  content: StatefulBuilder(builder:
+                                      (BuildContext context,
+                                          StateSetter setState) {
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        ListTile(
+                                          title: const Text('No Alerts'),
+                                          leading: Radio(
+                                            activeColor:
+                                                const Color(0xFFEA5455),
+                                            value: Notification.none,
+                                            groupValue: _n,
+                                            onChanged: (Notification value) {
+                                              setState(() {
+                                                noti = 'No';
+                                                _n = value;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        ListTile(
+                                          title: const Text('One Day Before'),
+                                          leading: Radio(
+                                            activeColor:
+                                                const Color(0xFFEA5455),
+                                            value: Notification.oneDay,
+                                            groupValue: _n,
+                                            onChanged: (Notification value) {
+                                              setState(() {
+                                                noti = 'One';
+                                                _n = value;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        ListTile(
+                                          title: const Text('Same Day'),
+                                          leading: Radio(
+                                            activeColor:
+                                                const Color(0xFFEA5455),
+                                            value: Notification.sameDay,
+                                            groupValue: _n,
+                                            onChanged: (Notification value) {
+                                              setState(() {
+                                                noti = 'Same';
+                                                _n = value;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        ListTile(
+                                          title: Text(notificationTime.minute <
+                                                      10 ||
+                                                  notificationTime.minute ==
+                                                      null
+                                              ? 'Time: ${notificationTime.hour}:0${notificationTime.minute}'
+                                              : 'Time: ${notificationTime.hour}:${notificationTime.minute}'),
+                                          trailing:
+                                              Icon(LineAwesomeIcons.clock_o),
+                                          onTap: () {
+                                            return showTimePicker(
+                                              initialTime: TimeOfDay(
+                                                  hour: 21, minute: 00),
+                                              context: context,
+                                            ).then(
+                                              (selectedTime) async {
+                                                setState(() {
+                                                  var t = TimeOfDay(
+                                                      hour: 21, minute: 00);
+                                                  if (selectedTime == null) {
+                                                    notificationTime = t;
+                                                  } else {
+                                                    notificationTime =
+                                                        selectedTime;
+                                                  }
+                                                });
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: const Text('Set Reminder'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
                                       },
                                     ),
-                                  ),
-                                  ListTile(
-                                    title: const Text('One Day Before'),
-                                    leading: Radio(
-                                      activeColor: const Color(0xFFEA5455),
-                                      value: Notification.oneDay,
-                                      groupValue: _n,
-                                      onChanged: (Notification value) {
-                                        setState(() {
-                                          noti = 'One';
-                                          _n = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  ListTile(
-                                    title: const Text('Same Day'),
-                                    leading: Radio(
-                                      activeColor: const Color(0xFFEA5455),
-                                      value: Notification.sameDay,
-                                      groupValue: _n,
-                                      onChanged: (Notification value) {
-                                        setState(() {
-                                          noti = 'Same';
-                                          _n = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  ListTile(
-                                    title: Text(notificationTime.minute < 10 ||
-                                            notificationTime.minute == null
-                                        ? 'Time: ${notificationTime.hour}:0${notificationTime.minute}'
-                                        : 'Time: ${notificationTime.hour}:${notificationTime.minute}'),
-                                    trailing: Icon(LineAwesomeIcons.clock_o),
-                                    onTap: () {
-                                      return showTimePicker(
-                                        initialTime:
-                                            TimeOfDay(hour: 21, minute: 00),
-                                        context: context,
-                                      ).then(
-                                        (selectedTime) async {
-                                          setState(() {
-                                            
-                                            var t =
-                                                TimeOfDay(hour: 21, minute: 00);
-                                            if (selectedTime == null) {
-                                              notificationTime = t;
-                                            } else {
-                                              notificationTime = selectedTime;
-                                            }
-                                          });
-                                        },
-                                      );
-                                    },
-                                  ),
-                                ],
-                              );
-                            }),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: const Text('Set Reminder'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      ).then((value) {
-                        if (noti == "One") {
-                          notiCtl.text = "One Day Before";
-                        } else if (noti == "Same") {
-                          notiCtl.text = "Same Day";
-                        } else {
-                          notiCtl.text = 'No Alerts';
-                        }
-                      });
-                    },
-                  ),
+                                  ],
+                                );
+                              },
+                            ).then((value) {
+                              if (noti == "One") {
+                                notiCtl.text = "One Day Before";
+                              } else if (noti == "Same") {
+                                notiCtl.text = "Same Day";
+                              } else {
+                                notiCtl.text = 'No Alerts';
+                              }
+                            });
+                          },
+                        )
+                      : Container(),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.008,
                   ),
@@ -554,29 +703,62 @@ class _NewSubFormState extends State<NewSubForm> {
                     onTap: () async {
                       if (_formKey.currentState.validate()) {
                         createdAt = DateTime.now();
+                        if (widget.editForm) {
+                          final sub = Sub(
+                              id: widget.initialId,
+                              subsPrice:
+                                  price ?? double.parse(widget.initialPrice),
+                              subsName: name ?? widget.initialName,
+                              notes: notes ?? widget.initialNotes,
+                              payStatus: payStatus ?? widget.initialStatus,
+                              payMethod:
+                                  payMethod ?? widget.initialPaymentMethod,
+                              payDate: payDate ?? widget.initialDate,
+                              periodNo: periodNo == '1'
+                                  ? widget.initialPeriodNo
+                                  : periodNo,
+                              periodType: periodType == 'Month'
+                                  ? widget.initialPeriodType
+                                  : periodType,
+                              category: category ?? widget.initialCategory,
+                              currency: '\$',
+                              archive: 'false',
+                              createdAt: widget.createdAt);
+                          db.updateSub(sub);
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        } else {
+                          print(periodNo);
+                          print(periodType);
+                          Sub sub = Sub(
+                            id: null,
+                            subsPrice: price,
+                            subsName: name,
+                            notes: notes,
+                            payStatus: payStatus,
+                            payMethod: payMethod,
+                            payDate: payDate,
+                            periodNo: periodNo ?? '1',
+                            periodType: periodType ?? 'Month',
+                            category: category,
+                            currency: '\$',
+                            archive: 'false',
+                            createdAt: createdAt,
+                          );
+                          db.insertSub(sub);
 
-                        Sub sub = Sub(
-                          id: null,
-                          subsPrice: price,
-                          subsName: name,
-                          notes: notes,
-                          payStatus: payStatus,
-                          payMethod: payMethod,
-                          payDate: payDate,
-                          periodNo: periodNo,
-                          periodType: periodType,
-                          category: category,
-                          currency: '\$',
-                          archive: 'false',
-                          createdAt: createdAt,
-                        );
-                        db.insertSub(sub);
-                        
+                          Navigator.of(context).pop('Success');
 
-                        Navigator.of(context).pop('Success');
-
-                        setNotification(periodType, payDate, periodNo, name,
-                            price, noti, notificationTime, createdAt);
+                          setNotification(
+                              periodType ?? 'Month',
+                              payDate,
+                              periodNo ?? '1',
+                              name,
+                              price,
+                              noti,
+                              notificationTime,
+                              createdAt);
+                        }
                       }
                     },
                   ),

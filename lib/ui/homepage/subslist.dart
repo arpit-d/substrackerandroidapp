@@ -11,6 +11,8 @@ import 'package:substracker/models/filter.dart';
 import 'package:substracker/models/numofsubs.dart';
 import 'package:substracker/models/sort.dart';
 import 'package:substracker/models/subsdatalist.dart';
+import 'package:substracker/ui/constants/title_c.dart';
+import 'package:substracker/ui/subinfo/n_sub_info.dart';
 import 'package:substracker/ui/subinfo/subinfo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
@@ -22,8 +24,6 @@ class SubsList extends StatefulWidget {
 }
 
 class _SubsListState extends State<SubsList> {
-  final Color c1 = const Color(0xFFFEB692);
-  final Color c2 = const Color(0xFFEA5455);
   @override
   Widget build(BuildContext context) {
     var box = Hive.box('subs');
@@ -53,7 +53,7 @@ class _SubsListState extends State<SubsList> {
         builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
           final subs = snapshot.data ?? List(0);
 
-          return allSubsList(context, box, subs, db, 'EXPENSES');
+          return allSubsList(context, box, subs, db, 'MONTHLY');
         },
       );
     } else if (s.sorts == 'Paid') {
@@ -73,7 +73,7 @@ class _SubsListState extends State<SubsList> {
           subs.sort((a, b) {
             return b.subsPrice.compareTo(a.subsPrice);
           });
-          return allSubsList(context, box, subs, db, 'EXPENSES');
+          return allSubsList(context, box, subs, db, 'MONTHLY');
         },
       );
     } else if (s.sorts == 'Upcoming') {
@@ -87,7 +87,7 @@ class _SubsListState extends State<SubsList> {
                 .compareTo(getRealDate(b.payDate, b.periodNo, b.periodType,
                     true, box.get('dateFormat', defaultValue: 'dd/MM/yy')));
           });
-          return allSubsList(context, box, subs, db, 'EXPENSES');
+          return allSubsList(context, box, subs, db, 'MONTHLY');
         },
       );
     } else if (s.sorts == 'Pending') {
@@ -134,6 +134,7 @@ class _SubsListState extends State<SubsList> {
           child: const Text(
             '''You Have Not Added Any Subscriptions Yet. Click On The Below Icon To Start!''',
             style: const TextStyle(fontSize: 18),
+            textAlign: TextAlign.center,
           ),
         ),
       );
@@ -143,7 +144,7 @@ class _SubsListState extends State<SubsList> {
         SizedBox(height: MediaQuery.of(context).size.height * 0.015),
         Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [c1, c2]),
+            gradient: gradient,
             borderRadius: const BorderRadius.all(
               const Radius.circular(10),
             ),
@@ -255,10 +256,10 @@ class _SubsListState extends State<SubsList> {
                 }
                 sum = sum + monthlySpend;
               });
-
+              subsDataList.setSubList(subs);
               exp.setExpenses(sum);
               num.totalSubs(subs.length);
-              subsDataList.setSubList(subs);
+
               return Slidable(
                 actionPane: const SlidableDrawerActionPane(),
                 actionExtentRatio: 0.25,
@@ -344,7 +345,7 @@ class _SubsListState extends State<SubsList> {
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) => SubInfo(
+                            builder: (BuildContext context) => NewSubInfo(
                                   createdAt: item.createdAt,
                                   name: item.subsName,
                                   firstPayment: item.payDate,

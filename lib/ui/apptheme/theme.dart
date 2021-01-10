@@ -58,6 +58,7 @@ const MaterialColor primarySwatch =
 const String FONT_NAME = 'Rubik';
 
 ThemeData lightTheme = ThemeData(
+   cursorColor : const Color(0xFFEA5455),
     inputDecorationTheme: const InputDecorationTheme(
       labelStyle: TextStyle(color: Color(0xFF696969)),
       focusedBorder: const OutlineInputBorder(
@@ -117,6 +118,7 @@ ThemeData lightTheme = ThemeData(
     pageTransitionsTheme: pageTransitionsTheme);
 
 ThemeData darkTheme = ThemeData(
+  cursorColor : const Color(0xFFEA5455),
     buttonTheme: ButtonThemeData(),
     dialogTheme: const DialogTheme(
       backgroundColor: const Color(0xFF111111),

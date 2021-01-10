@@ -4,7 +4,10 @@ import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:substracker/functions/showSnackbar.dart';
 import 'package:substracker/ui/apptheme/theme.dart';
+import 'package:substracker/ui/constants/title_c.dart';
 import 'package:substracker/ui/homepage/bottomsheetmenu.dart';
+import 'package:substracker/ui/homepage/statistics/insights_bottom_sheet.dart';
+import 'package:substracker/ui/homepage/statistics/insights_data.dart';
 import 'package:substracker/ui/homepage/statistics/statistics_data.dart';
 import 'package:substracker/ui/homepage/subslist.dart';
 import 'package:substracker/ui/newsubpage/newsubpage.dart';
@@ -13,23 +16,27 @@ import 'package:substracker/ui/settings/settings.dart';
 
 import 'archived/archive.dart';
 
-class HomePage extends StatelessWidget {
-  void _bottSheet(context, String type) async {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          if (type == 'filter') {
-            return FilterBottomSheet();
-          }
+void bottSheet(context, String type) async {
+  showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        if (type == 'filter') {
+          return FilterBottomSheet();
+        } else if (type == 'insights') {
+          return InsightsBottomSheet();
+        } else {
           return ModalContent();
-        });
-  }
+        }
+      });
+}
 
+class HomePage extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final Color c1 = const Color(0xFFFEB692);
   final Color c2 = const Color(0xFFEA5455);
   @override
   Widget build(BuildContext context) {
+    print('built');
     return Scaffold(
       key: scaffoldKey,
       drawer: Drawer(
@@ -38,7 +45,7 @@ class HomePage extends StatelessWidget {
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [c1, c2]),
+                gradient: gradient,
               ),
               child: Container(),
             ),
@@ -96,7 +103,7 @@ class HomePage extends StatelessWidget {
               icon: const Icon(LineAwesomeIcons.filter),
               tooltip: 'Filter Menu',
               onPressed: () {
-                _bottSheet(context, 'filter');
+                bottSheet(context, 'filter');
               },
             );
           }),
@@ -105,7 +112,7 @@ class HomePage extends StatelessWidget {
               icon: const Icon(LineAwesomeIcons.angle_down),
               tooltip: 'Sort Menu',
               onPressed: () {
-                _bottSheet(context, 'sort');
+                bottSheet(context, 'sort');
               },
             );
           }),
@@ -138,14 +145,14 @@ class HomePage extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.09),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            gradient: LinearGradient(colors: [c1, c2]),
+            gradient: gradient,
           ),
           child: Builder(builder: (BuildContext context) {
             return IconButton(
               onPressed: () async {
                 final result = await Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NewSubForm()),
+                  MaterialPageRoute(builder: (context) => NewSubForm(false)),
                 );
 
                 if (result == 'Success') {

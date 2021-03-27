@@ -6,5 +6,6 @@ class InsightsSort extends ChangeNotifier {
     sortType = type;
     notifyListeners();
   }
+
   String get currentSortType => sortType;
 }

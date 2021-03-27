@@ -19,16 +19,10 @@ class _SettingsPageState extends State<SettingsPage> {
   DateFormat format = DateFormat.ddMMyy;
   String dateFormatType = 'dd/MM/yy';
 
-  getData() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    print('Running on ${androidInfo.model}');
-  }
-
   @override
   Widget build(BuildContext context) {
     final box = Hive.box('subs');
-    getData();
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

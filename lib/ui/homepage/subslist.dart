@@ -51,7 +51,7 @@ class _SubsListState extends State<SubsList> {
       return StreamBuilder(
         stream: db.getSubs(),
         builder: (context, AsyncSnapshot<List<Sub>> snapshot) {
-          final subs = snapshot.data ?? List(0);
+          final subs = snapshot.data ?? [];
 
           return allSubsList(context, box, subs, db, 'MONTHLY');
         },
@@ -124,7 +124,6 @@ class _SubsListState extends State<SubsList> {
     final exp = Provider.of<Expenses>(context);
     final num = Provider.of<NumOfSubs>(context);
     final subsDataList = Provider.of<SubsDataList>(context);
-    int index = 0;
 
     if (subs.length == 0) {
       // exp.setExpenses(0);
